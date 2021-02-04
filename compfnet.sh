@@ -16,6 +16,25 @@ function usage {
 sshport=22;
 s_pwd_used=0;
 
+function getPlatform()
+{
+    local platform="Unsupported"
+    local sn_line=""
+if [[ $s_pwd_used -eq 1 ]] ; then
+        sn_line=`sshpass -e ssh -p $sshport admin@$1 -T << !
+            get system status
+!
+`
+        sn_line=`echo "$sn_line" | grep 'Serial-Number'`
+else
+        sn_line=`ssh -p "$sshport" "admin@$1" get system status | grep 'Serial-Number'`
+fi
+#    echo "debug sn $sn_line"
+    platform=$( echo $sn_line | sed -e 's:.*FAD.*:FAD:' -e 's:.*FGT.*:FGT:')
+    echo "$platform"
+}
+
+
 # A POSIX variable
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
@@ -38,12 +57,12 @@ done
 
 shift $((OPTIND-1))
 
-echo "Debug: first $1 second $2 port $sshport pwd $sshpwd"
+#echo "Debug: first $1 second $2 port $sshport pwd $sshpwd"
 
 # validate input parameters
+export SSHPASS="$sshpwd"
 
 # check number of args (non-options): $#
-
 if [[ $# > 2 ]] || [[ $# < 1 ]] ; then
     usage
 fi
@@ -63,7 +82,7 @@ else
     # Check that the user default user key has been added to target host. If not, add it.
     ssh -p $sshport -q -o "BatchMode=yes" $1 exit 0
     return_code=$?
-    echo "return code = $return_code"
+#    echo "return code = $return_code"
     if [[ $return_code -ne 0 ]] ; then
         echo "Error logging in automatically with your default ssh public key. "
         echo "Possible solutions:"
@@ -73,8 +92,7 @@ else
     fi
 fi
 
-
-export SSHPASS="$sshpwd"
+fPlatform=`getPlatform $1`
 
 # Check console output setting is standard
 
@@ -91,42 +109,45 @@ fi
 if [[ -z $original_mode ]] ; then
 # If the console is not standard mode Enable continuous console output
 # -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
-if [[ $s_pwd_used -eq 1 ]] ; then
-    sshpass -p $sshpwd ssh -p $sshport admin@$1 -T &> /dev/null << !
-config system console
-    set output standard
-end
-!
-else
-    ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
-    config system console
-        set output standard
-    end
+    if [[ $s_pwd_used -eq 1 ]] ; then
+        sshpass -p $sshpwd ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
+        config system console
+            set output standard
+        end
 EOF
-fi
+    else
+        ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
+        config system console
+            set output standard
+        end
+EOF
+    fi
 fi
 
 if (( $# == 1)) ; then
-if [[ $s_pwd_used -eq 1 ]] ; then
-    sshpass -p $sshpwd ssh -p $sshport admin@$1 -T > "$1_baseline.txt" << !
+    if [[ $s_pwd_used -eq 1 ]] ; then
+        sshpass -p $sshpwd ssh -p $sshport admin@$1 -T > "$1_baseline.txt" << !
+        show
 show 
+        show
+show 
+        show
 !
-else
-    ssh -p $sshport admin@$1 show > "$1_baseline.txt"
+    else
+        ssh -p $sshport admin@$1 show > "$1_baseline.txt"
+    fi
 fi
-fi
-echo "here $#  $s_pwd_used $sshpwd $sshport $1"
+#echo "here $#  $s_pwd_used $sshpwd $sshport $1"
 
 if (( $# == 2)) ; then
-if [[ $s_pwd_used -eq 1 ]] ; then
+    if [[ $s_pwd_used -eq 1 ]] ; then
         coutput=`sshpass -e ssh -p $sshport admin@$1 -T << !
-show
+    show
 !
 `
-else
+    else
         coutput=$(ssh -p "$sshport" "admin@$1" 'show')
-fi
-echo "here2"
+    fi
     running=`echo "$coutput"  | wc -l` 
     baseline=`cat "$2"  | wc -l`
     echo "Config lines in running config: $running"
@@ -143,21 +164,52 @@ echo "here2"
   #diff --changed-group-format='%>' --unchanged-group-format='' -I "^.*set.*ENC" "$2" <(echo "$coutput")  
 fi
 
-if [[ -z $original_mode ]] ; then
+if [[ $fPlatform == "FGT" ]] 
+then
+    if [[ -z $original_mode ]] ; then
+    # If the console was not standard mode, restore it to more 
 # If the console was not standard mode, restore it to more 
-# -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
-if [[ $s_pwd_used -eq 1 ]] ; then
-    sshpass -p $sshpwd ssh -p $sshport admin@$1 -T &> /dev/null << !
-    config system console
-        set output more
-    end
+    # If the console was not standard mode, restore it to more 
+# If the console was not standard mode, restore it to more 
+    # If the console was not standard mode, restore it to more 
+    # -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
+        if [[ $s_pwd_used -eq 1 ]] ; then
+            sshpass -p $sshpwd ssh -p $sshport admin@$1 -T &> /dev/null << !
+            config system console
+                set output more
+            end
 !
-else
-    ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
-    config system console
-        set output more
-    end
-EOF
-fi
-fi
+        else
+            ssh -p $sshport admin@$1 -T &> /dev/null << !
+            config system console
+                set output more
+            end
+!
+        fi
+    fi
+elif [[ $fPlatform == "FAD" ]]
+then
+    if [[ -z $original_mode ]] ; then
+    # If the console was not standard mode, restore it to more 
+    # -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
+        if [[ $s_pwd_used -eq 1 ]] ; then
+            sshpass -p $sshpwd ssh -p $sshport admin@$1 -T << !
+            config global
+            config system console
+                set output more
+            end
+!  
+        else
+            ssh -p $sshport admin@$1 -T &> /dev/null << !
+            config global
+            config system console
+                set output more
+            end
+!
 
+        fi
+    fi
+else
+    echo "$fPlatform"
+    exit 1
+fi
