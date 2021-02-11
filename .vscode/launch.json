@@ -7,6 +7,14 @@
         {
             "type": "bashdb",
             "request": "launch",
+            "name": "Bash-Debug (hardcoded compnet FGT compare)",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/compfnet.sh",
+            "args": [ "-m", "mod", "hr", "hr_baseline.txt"]
+        },
+        {
+            "type": "bashdb",
+            "request": "launch",
             "name": "Bash-Debug (select script from list of sh files)",
             "cwd": "${workspaceFolder}",
             "program": "${command:SelectScriptName}",
@@ -15,11 +23,19 @@
         {
             "type": "bashdb",
             "request": "launch",
-            "name": "Bash-Debug (hardcoded compfnet FAD)",
+            "name": "Bash-Debug (hardcoded compfnet FAD baseline)",
             "cwd": "${workspaceFolder}",
             "program": "${workspaceFolder}/compfnet.sh",
             "args": ["-s", "fortinet", "-p", "10101", "fp4"]
         },
+        {
+            "type": "bashdb",
+            "request": "launch",
+            "name": "Bash-Debug (hardcoded compfnet FAD compare)",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/compfnet.sh",
+            "args": ["-s", "fortinet", "-p", "10101", "-m", "all", "fp4", "fp4_baseline.txt" ]
+        },        
         {
             "type": "bashdb",
             "request": "launch",

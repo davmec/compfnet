@@ -1,20 +1,31 @@
 #!/bin/bash
+#
+# Simple tool to generate/display diff of  CLI configurations for FortiADC and FortiGate
+#
+
 
 function usage {
-        echo "Usage: $0 [-p sshport] [-s sshpassword] fnethost [baseline-config-file]"
+        echo "Usage: $0 [-p sshport] [-s sshpassword] [-m mode] fnethost [baseline-config-file]"
         echo "       $0 fnethost"
         echo "          - Fetches config from fnethost and writes it to text file fnethost_baseline.txt"
         echo ""            
         echo "       OPTIONS:"
         echo "          -p sshport              Sets SSH port to something different than the default number 22"
         echo "          -s sshpassword          Sets SSH password when public key auth not available. Requires sshpass."
-        echo "          baseline-config-file    Fetches config from fnethost and compares it to config file baseline-config-file"
+        echo "          baseline-config-file    Fetches config from fnethost and diif compares it to config file baseline-config-file"
+        echo "          -m all                  In comparison, shows all differences side by side"
+        echo "          -m mod                  In comparison, shows only modified lines"
+        echo "          -m new                  In comparison, shows only added/removed lines(default)"
+        echo "          -m full                 Compare showing also common lines"
         exit 1
 }
 
+# Variable and parameter initialization
 # Default SSH port unless specified in option
-sshport=22;
-s_pwd_used=0;
+sshport=22
+s_pwd_used=0
+show_mode="new"
+mode=""
 
 function getPlatform()
 {
@@ -38,7 +49,7 @@ fi
 # A POSIX variable
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
-while getopts "h?p:s:" opt; do
+while getopts "h?p:s:m:" opt; do
     case "$opt" in
     h|\?)
         usage
@@ -46,7 +57,9 @@ while getopts "h?p:s:" opt; do
     p)  sshport=$OPTARG
         ;;
     s)  sshpwd=$OPTARG
-        s_pwd_used=1;
+        s_pwd_used=1
+        ;;
+    m)  show_mode=$OPTARG
         ;;
     :)  echo "Invalid option: -$OPTARG requires an argument" 1>&2
         exit 0
@@ -69,6 +82,12 @@ fi
 
 if [[ $sshport < 1 ]] || [[ $sshport > 65535 ]] ; then
     echo "Invalid SSH port chosen: $sshport. Valid range: 1-65535"
+    exit 1
+fi
+
+if [[ $show_mode != "new" ]] && [[ $show_mode != "mod" ]] && [[ $show_mode != "all" ]] && [[ $show_mode != "full" ]]; then
+    echo "Invalid value for m opion"
+    usage
     exit 1
 fi
 
@@ -95,43 +114,84 @@ fi
 fPlatform=`getPlatform $1`
 
 # Check console output setting is standard
-
-if [[ $s_pwd_used -eq 1 ]] ; then
-    original_mode=`sshpass -e ssh -p $sshport admin@$1 -T << !
-    config global
-show system console | grep 'output standard'
+if [[ $fPlatform == "FGT" ]] 
+    then
+    if [[ $s_pwd_used -eq 1 ]] ; then
+        mode=`sshpass -e ssh -p $sshport admin@$1 -T << !
+    show system console 
 !
 `
-else
-    original_mode=`ssh -p "$sshport" "admin@$1" show system console | grep 'output standard'`
-fi
-
-if [[ -z $original_mode ]] ; then
-# If the console is not standard mode Enable continuous console output
-# -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
-    if [[ $s_pwd_used -eq 1 ]] ; then
-        sshpass -p $sshpwd ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
-        config system console
-            set output standard
-        end
-EOF
     else
-        ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
-        config system console
-            set output standard
-        end
-EOF
+        mode=`ssh -p "$sshport" "admin@$1" show system console`
     fi
+    
+    original_mode=$(echo "$mode" | grep 'standard')
+    
+    if [[ -z $original_mode ]] ; then
+    # If the console is not standard mode Enable continuous console output
+    # -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
+        if [[ $s_pwd_used -eq 1 ]] ; then
+            sshpass -p $sshpwd ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
+            config system console
+                set output standard
+            end
+EOF
+        else
+            ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
+            config system console
+                set output standard
+            end
+EOF
+        fi
+    fi
+elif [[ $fPlatform == "FAD" ]]
+then
+    if [[ $s_pwd_used -eq 1 ]] ; then
+        mode=`sshpass -e ssh -p $sshport admin@$1 -T << 'EOF'
+        config global
+        show system console 
+EOF
+`
+    else
+        mode=`ssh -p $sshport admin@$1 -T << 'EOF'
+        config global
+        show system console 
+EOF
+`
+    fi
+
+    original_mode=` echo "$mode" | grep 'standard' `
+
+    if [[ -z $original_mode ]] ; then
+    # If the console is not standard mode Enable continuous console output
+    # -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
+        if [[ $s_pwd_used -eq 1 ]] ; then
+            sshpass -e ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
+            config global
+            config system console
+                set output standard
+            end
+            end
+EOF
+        else
+            ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
+            config global
+            config system console
+                set output standard
+            end
+            end
+EOF
+        fi
+    fi
+else
+    echo "$fPlatform"
+    exit 1
 fi
 
 if (( $# == 1)) ; then
     if [[ $s_pwd_used -eq 1 ]] ; then
         sshpass -p $sshpwd ssh -p $sshport admin@$1 -T > "$1_baseline.txt" << !
-        show
-show 
-        show
-show 
-        show
+show
 !
     else
         ssh -p $sshport admin@$1 show > "$1_baseline.txt"
@@ -149,14 +209,26 @@ if (( $# == 2)) ; then
         coutput=$(ssh -p "$sshport" "admin@$1" 'show')
     fi
     running=`echo "$coutput"  | wc -l` 
-    baseline=`cat "$2"  | wc -l`
+    baseline=`printf '%b\n' "$(cat $2)"| wc -l`
     echo "Config lines in running config: $running"
     echo "Config lines in baseline $2: $baseline"
+    echo "========================================================================================="
+    echo "   diff                          RUNNING $fPlatform CONFIG       < >      $2       "
+    echo "========================================================================================="
 
-    echo "==== diff running $2 ====="
-    echo ""
+    if [[ $show_mode == "new" ]]
+    then
+        diff -y --suppress-common-lines -I "^.*set.*pass.*ENC" <(echo "$coutput") "$2" | grep -E -i '<|>'
+    elif [[ $show_mode == "mod" ]]
+    then
+        diff -y --suppress-common-lines -I "^.*set.*pass.*ENC" <(echo "$coutput") "$2" | grep '|'
+    elif [[ $show_mode == "all" ]]
+    then
+        diff -y --suppress-common-lines -I "^.*set.*pass.*ENC" <(echo "$coutput") "$2" 
+    else
+        diff -y <(echo "$coutput") "$2" 
+    fi
 
-    diff -y -W 70 --suppress-common-lines -I "^.*set.*ENC" <(echo "$coutput") "$2" | grep -v '|'
   #  
   #echo "=== Lines only in $2 === "
   #diff --changed-group-format='%<' --unchanged-group-format='' -I "^.*set.*ENC" "$2" <(echo "$coutput")  
@@ -174,17 +246,17 @@ then
     # If the console was not standard mode, restore it to more 
     # -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
         if [[ $s_pwd_used -eq 1 ]] ; then
-            sshpass -p $sshpwd ssh -p $sshport admin@$1 -T &> /dev/null << !
+            sshpass -e ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
             config system console
                 set output more
             end
-!
+EOF
         else
-            ssh -p $sshport admin@$1 -T &> /dev/null << !
+            ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
             config system console
                 set output more
             end
-!
+EOF
         fi
     fi
 elif [[ $fPlatform == "FAD" ]]
@@ -192,22 +264,23 @@ then
     if [[ -z $original_mode ]] ; then
     # If the console was not standard mode, restore it to more 
     # -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
-        if [[ $s_pwd_used -eq 1 ]] ; then
-            sshpass -p $sshpwd ssh -p $sshport admin@$1 -T << !
-            config global
-            config system console
-                set output more
-            end
-!  
-        else
-            ssh -p $sshport admin@$1 -T &> /dev/null << !
-            config global
-            config system console
-                set output more
-            end
-!
-
-        fi
+    if [[ $s_pwd_used -eq 1 ]] ; then
+        sshpass -e ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
+        config global
+        config system console
+            set output more
+        end
+        end
+EOF
+    else
+        ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
+        config global
+        config system console
+            set output more
+        end
+        end
+EOF
+    fi
     fi
 else
     echo "$fPlatform"
