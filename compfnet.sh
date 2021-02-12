@@ -78,6 +78,10 @@ export SSHPASS="$sshpwd"
 # check number of args (non-options): $#
 if [[ $# > 2 ]] || [[ $# < 1 ]] ; then
     usage
+    exit 1
+elif [[ $# -eq 2 ]] && [[ ! -f $2 ]] ; then
+    echo "File $2 does not exist"
+    exit 1
 fi
 
 if [[ $sshport < 1 ]] || [[ $sshport > 65535 ]] ; then

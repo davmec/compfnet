@@ -7,6 +7,14 @@
         {
             "type": "bashdb",
             "request": "launch",
+            "name": "Bash-Debug (hardcoded compnet FGT baseline)",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/compfnet.sh",
+            "args": ["hr"]
+        },
+        {
+            "type": "bashdb",
+            "request": "launch",
             "name": "Bash-Debug (hardcoded compnet FGT compare)",
             "cwd": "${workspaceFolder}",
             "program": "${workspaceFolder}/compfnet.sh",
