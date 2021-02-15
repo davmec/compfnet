@@ -112,7 +112,7 @@ if [[ $s_pwd_used -eq 1 ]] ; then
     fi
 else
     # Check that the user default user key has been added to target host. If not, add it.
-    ssh -p $sshport -q -o "BatchMode=yes" admin@$1 exit 0
+    ssh -p $sshport -q -o "BatchMode=yes" admin@$1 exit 0 &> /dev/null
     return_code=$?
 #    echo "return code = $return_code"
     if [[ $return_code -ne 0 ]] ; then
