@@ -54,7 +54,7 @@ Note : Password based authenticatoin requires that the tool sshpass is installed
 
 ### Step 3: Run the tool again to check what was changed in the configuration
 
-####Passwordless
+#### Passwordless
 **Note:** Requires that passwordless authentication config setup is active and configured to accept the default SSH id for your user in the computer where you run the script. 
 
 The examples shown hereafter target a FortiGate where the user key ~/.ssh/rsa_id.pub has been authorized and SSH service is running in TCP port 122. 
@@ -84,7 +84,7 @@ compfnet.sh -p 122 -m full 10.1.1.10 FGT-10.1.1.10_baseline.txt
 ```
 
 
-####Password based aunthentication
+#### Password based aunthentication
 
 **Note:** Password based authenticatoin requires that the tool sshpass is installed in the system (in order to automate password based logins).
 
