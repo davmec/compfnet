@@ -38,9 +38,9 @@ Usage: ./compfnet.sh [-p sshport] [-s sshpassword] [-m mode] fnethost [baseline-
           - Fetches config from fnethost and writes it to text file fnethost_baseline.txt
 
        OPTIONS:
-          -p sshport              Sets SSH port to something different than the default number 22
-          -s sshpassword          Sets SSH password when public key auth not available. Requires sshpass.
-          baseline-config-file    Fetches config from fnethost and diif compares it to config file baseline-config-file
+          -p sshport              Sets SSH port to other than default 22
+          -s sshpassword          Sets SSH password when public key auth not available. Requires sshpass
+          baseline-config-file    Fetches config from fnethost and diff compares it to baseline-config-file
           -m all                  In comparison, shows all differences side by side
           -m mod                  In comparison, shows only modified lines
           -m new                  In comparison, shows only added/removed lines(default)
