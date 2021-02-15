@@ -5,6 +5,15 @@
 
 
 function usage {
+        echo '┌────────────────────────────────────────────────────────┐'
+        echo '│                                  ____           __     │'
+        echo '│      _________  ____ ___  ____  / __/___  ___  / /_    │'
+        echo '│     / ___/ __ \/ __ `__ \/ __ \/ /_/ __ \/ _ \/ __/    │'
+        echo '│    / /__/ /_/ / / / / / / /_/ / __/ / / /  __/ /_      │'
+        echo '│    \___/\____/_/ /_/ /_/ .___/_/ /_/ /_/\___/\__/      │'
+        echo '│                       /_/                              │'
+        echo '└────────────────────────────────────────────────────────┘'
+        echo ""
         echo "Usage: $0 [-p sshport] [-s sshpassword] [-m mode] fnethost [baseline-config-file]"
         echo "       $0 fnethost"
         echo "          - Fetches config from fnethost and writes it to text file fnethost_baseline.txt"

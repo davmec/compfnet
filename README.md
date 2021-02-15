@@ -1,7 +1,14 @@
 # compfnet
-Script to diff compare user entered configuration to running configuration in Fortinet appliances. Only FortiGate and FortiADC supported for now.
+Script to diff compare running configuration to previously save configuration baseline(s) in Fortinet appliances. Only FortiGate and FortiADC supported for now.
 
 User admin assumed by default.
+## Motivation
+The tool is wrapping around UNIX diff commonly available in Linux distros and Mac OSX by default. 
+
+The practicality of it relates to the capability to easily get a summary of changes with respect to a previous configuration after a "network debugging" or tuning session with FortiADC or FortiGate. The FortiADC and FortiGate configuration files can be dauntingly long and it can be hard to spot any changes that have been made (and forgotten) during a long config session. 
+
+FortiGate already includes a similar tool in GUI, but the same is not available in FortiADC (at the moment of this writing). It can also come handy when one of the parties configuring or checking configuration only has CLI access to the platform.
+
 
 ## Prerequisites 
 Depending on your target platform (FortiADC or FortiGate) you might need to install sshpass to automate SSH password logins.

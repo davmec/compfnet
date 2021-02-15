@@ -1,0 +1,54 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "bashdb",
+            "request": "launch",
+            "name": "Bash-Debug (hardcoded compnet FGT baseline)",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/compfnet.sh",
+            "args": ["192.168.1.19"]
+        },
+        {
+            "type": "bashdb",
+            "request": "launch",
+            "name": "Bash-Debug (hardcoded compnet FGT compare)",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/compfnet.sh",
+            "args": [ "-m", "mod", "hr", "hr_baseline.txt"]
+        },
+        {
+            "type": "bashdb",
+            "request": "launch",
+            "name": "Bash-Debug (select script from list of sh files)",
+            "cwd": "${workspaceFolder}",
+            "program": "${command:SelectScriptName}",
+            "args": []
+        },
+        {
+            "type": "bashdb",
+            "request": "launch",
+            "name": "Bash-Debug (hardcoded compfnet FAD baseline)",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/compfnet.sh",
+            "args": ["-s", "fortinet", "-p", "10101", "fp4"]
+        },
+        {
+            "type": "bashdb",
+            "request": "launch",
+            "name": "Bash-Debug (hardcoded compfnet FAD compare)",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceFolder}/compfnet.sh",
+            "args": ["-s", "fortinet", "-p", "10101", "-m", "all", "fp4", "fp4_baseline.txt" ]
+        },        
+        {
+            "type": "bashdb",
+            "request": "launch",
+            "name": "Bash-Debug (simplest configuration)",
+            "program": "${file}"
+        }
+    ]
+}
