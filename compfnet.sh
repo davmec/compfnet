@@ -194,11 +194,11 @@ fi
 
 if (( $# == 1)) ; then
     if [[ $s_pwd_used -eq 1 ]] ; then
-        sshpass -p $sshpwd ssh -p $sshport admin@$1 -T > "$1_baseline.txt" << !
+        sshpass -p $sshpwd ssh -p $sshport admin@$1 -T > "$fPlatform-$1_baseline.txt" << !
 show
 !
     else
-        ssh -p $sshport admin@$1 show > "$1_baseline.txt"
+        ssh -p $sshport admin@$1 show > "$fPlatform-$1_baseline.txt"
     fi
 fi
 #echo "here $#  $s_pwd_used $sshpwd $sshport $1"
