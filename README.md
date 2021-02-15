@@ -21,8 +21,18 @@ It works with Mac OSX (brew installer):
 
 
 ## Usage
+`./compfnet.sh`
 
-```
+```bash
+┌────────────────────────────────────────────────────────┐
+│                                  ____           __     │
+│      _________  ____ ___  ____  / __/___  ___  / /_    │
+│     / ___/ __ \/ __ `__ \/ __ \/ /_/ __ \/ _ \/ __/    │
+│    / /__/ /_/ / / / / / / /_/ / __/ / / /  __/ /_      │
+│    \___/\____/_/ /_/ /_/ .___/_/ /_/ /_/\___/\__/      │
+│                       /_/                              │
+└────────────────────────────────────────────────────────┘
+
 Usage: ./compfnet.sh [-p sshport] [-s sshpassword] [-m mode] fnethost [baseline-config-file]
        ./compfnet.sh fnethost
           - Fetches config from fnethost and writes it to text file fnethost_baseline.txt
