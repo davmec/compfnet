@@ -26,6 +26,7 @@ function usage {
         echo "          -m mod                  In comparison, shows only modified lines"
         echo "          -m new                  In comparison, shows only added/removed lines(default)"
         echo "          -m full                 Compare showing also common lines"
+        echo "          -f 'string'             Find context for config line in running config or baseline. Use single quotes."
         exit 1
 }
 
@@ -35,14 +36,16 @@ sshport=22
 s_pwd_used=0
 show_mode="new"
 mode=""
+find_flag=0
+find_string=""
 
-function getPlatform()
+function getPlatform
 {
     local platform="Unsupported"
     local sn_line=""
 if [[ $s_pwd_used -eq 1 ]] ; then
         sn_line=`sshpass -e ssh -p $sshport admin@$1 -T << !
-            get system status
+get system status
 !
 `
         sn_line=`echo "$sn_line" | grep 'Serial-Number'`
@@ -54,14 +57,96 @@ fi
     echo "$platform"
 }
 
+function printContext
+{
+# Prints full config-end context for indicated line
+# In running config or file (when second arg supplied and valid file)    
+local conf_line=$find_string
+local running_conf=""
+local file=""
+
+if [[ $fPlatform == "FGT" ]] ; then
+#    echo "-f option not supported in this platform: $fPlatform"
+#    exit 1
+sed_args="/^config/{
+:a
+N
+/end/\!ba
+/$conf_line/p
+}"
+else
+#preparing sed arguments with searched conf_line
+sed_args="/config/{
+:a
+N
+/end/\!ba
+/$conf_line/p
+}"
+fi
+
+sed_args2="/edit/{
+:a
+N
+/next/\!ba
+/$conf_line/p
+}"
+
+sed_args=$(sed 's/\\!/!/g' <<< "$sed_args")
+sed_args2=$(sed 's/\\!/!/g' <<< "$sed_args2")
+#sed_args=$(sed 's/-/\-/g' <<< "$sed_args")
+#sed_args=$(sed 's/\"/\\"/g' <<< "$sed_args")
+
+
+#echo  "sed args $sed_args"
+
+if (( $# == 0)) ; then
+# if the file argument was not provided or does not exist, go for running
+    if [[ $s_pwd_used -eq 1 ]] ; then
+        running=$(sshpass -e ssh -p $sshport admin@$fnhost -T << !
+show
+!
+)
+    else
+        running=$(ssh -p "$sshport" "admin@$fnhost" 'show')
+    fi
+    # sed has to scan data from variable instead of file in this case
+    # Searsching for 
+    echo "---- Searching RUNNING CONFIG for $conf_line ----"
+    echo ""
+    result=`sed -nE "$sed_args" <<< "$running"`
+    if [[ $result == "" ]] ; then
+        sed -nE "$sed_args2" <<< "$running"
+    else
+        echo "$result"
+    fi
+elif (( $# == 1)) ; then
+    file=$1
+    echo "---- Searching FILE $file for $conf_line ----"
+    echo ""
+    sed -nE "$sed_args" $file
+    if [[ $result == "" ]] ; then
+        sed -nE "$sed_args2" $file
+    else
+        echo "$result"
+    fi
+else
+    echo "Wrong number of arguments passed to $0. It takes one or two."
+    exit 1
+fi
+#echo "grep"
+#echo "$running" | grep -A  5 "$conf_line"
+}
 
 # A POSIX variable
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
-while getopts "h?p:s:m:" opt; do
+while getopts "h?p:s:m:f:" opt; do
     case "$opt" in
     h|\?)
         usage
+        ;;
+    f)  find_flag=1
+        find_string=$OPTARG
         ;;
     p)  sshport=$OPTARG
         ;;
@@ -78,8 +163,6 @@ while getopts "h?p:s:m:" opt; do
 done
 
 shift $((OPTIND-1))
-
-#echo "Debug: first $1 second $2 port $sshport pwd $sshpwd"
 
 # validate input parameters
 export SSHPASS="$sshpwd"
@@ -114,7 +197,6 @@ else
     # Check that the user default user key has been added to target host. If not, add it.
     ssh -p $sshport -q -o "BatchMode=yes" admin@$1 exit 0 &> /dev/null
     return_code=$?
-#    echo "return code = $return_code"
     if [[ $return_code -ne 0 ]] ; then
         echo "Error logging in automatically with your default ssh public key. "
         echo "Possible solutions:"
@@ -202,6 +284,13 @@ else
 fi
 
 if (( $# == 1)) ; then
+    if [[ $find_flag -eq 1 ]] ; then
+        # saving the fortinet host before calling printContext
+        fnhost=$1
+        printContext 
+        # exit after this since we do not want to rewrite the baseline for this
+        exit 0
+    fi    
     if [[ $s_pwd_used -eq 1 ]] ; then
         sshpass -p $sshpwd ssh -p $sshport admin@$1 -T > "$fPlatform-$1_baseline.txt" << !
 show
@@ -210,12 +299,18 @@ show
         ssh -p $sshport admin@$1 show > "$fPlatform-$1_baseline.txt"
     fi
 fi
-#echo "here $#  $s_pwd_used $sshpwd $sshport $1"
 
 if (( $# == 2)) ; then
+    if [[ $find_flag -eq 1 ]] ; then
+        # saving the fortinet host before calling printContext
+        fnhost=$1
+        printContext $2
+        # exit after this since we do not want to go through diff compare for this
+        exit 0
+    fi    
     if [[ $s_pwd_used -eq 1 ]] ; then
         coutput=`sshpass -e ssh -p $sshport admin@$1 -T << !
-    show
+show
 !
 `
     else
@@ -241,7 +336,6 @@ if (( $# == 2)) ; then
     else
         diff -y <(echo "$coutput") "$2" 
     fi
-
   #  
   #echo "=== Lines only in $2 === "
   #diff --changed-group-format='%<' --unchanged-group-format='' -I "^.*set.*ENC" "$2" <(echo "$coutput")  
@@ -252,10 +346,6 @@ fi
 if [[ $fPlatform == "FGT" ]] 
 then
     if [[ -z $original_mode ]] ; then
-    # If the console was not standard mode, restore it to more 
-# If the console was not standard mode, restore it to more 
-    # If the console was not standard mode, restore it to more 
-# If the console was not standard mode, restore it to more 
     # If the console was not standard mode, restore it to more 
     # -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
         if [[ $s_pwd_used -eq 1 ]] ; then
