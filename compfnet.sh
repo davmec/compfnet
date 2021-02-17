@@ -2,7 +2,10 @@
 #
 # Simple tool to generate/display diff of  CLI configurations for FortiADC and FortiGate
 #
-
+# Disclaimer: This tool comes without warranty of any kind.
+#             Use it at your own risk. We assume no liability for the accuracy,, group-management
+#             correctness, completeness, or usefulness of any information
+#             provided nor for any sort of damages using this tool may cause.
 
 function usage {
         echo '┌────────────────────────────────────────────────────────┐'
@@ -109,7 +112,7 @@ show
         sed -nE "$sed_args" $file
         echo "$result"
     else
-        echo "Wrong number of arguments passed to $0. It takes one or two."
+        echo "Wrong number of arguments passed to $0. It takes one or zero."
         exit 1
     fi
 }
