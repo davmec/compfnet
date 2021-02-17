@@ -188,39 +188,10 @@ fi
 
 fPlatform=`getPlatform $1`
 
-# Check console output setting is standard
-if [[ $fPlatform == "FGT" ]] 
-    then
-    if [[ $s_pwd_used -eq 1 ]] ; then
-        mode=`sshpass -e ssh -p $sshport admin@$1 -T << !
-    show system console 
-!
-`
-    else
-        mode=`ssh -p "$sshport" "admin@$1" show system console`
-    fi
-    
-    original_mode=$(echo "$mode" | grep 'standard')
-    
-    if [[ -z $original_mode ]] ; then
-    # If the console is not standard mode Enable continuous console output
-    # -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
-        if [[ $s_pwd_used -eq 1 ]] ; then
-            sshpass -p $sshpwd ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
-            config system console
-                set output standard
-            end
-EOF
-        else
-            ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
-            config system console
-                set output standard
-            end
-EOF
-        fi
-    fi
-elif [[ $fPlatform == "FAD" ]]
-then
+# Check console output setting is standard - The command works the same in FortiADC and FortiGate
+# config global command will fail in non VDOM modes, but it is needed for those
+# Standard Error sent to null device to avoid displaying that error message
+
     if [[ $s_pwd_used -eq 1 ]] ; then
         mode=`sshpass -e ssh -p $sshport admin@$1 -T 2> /dev/null << 'EOF'
         config global
@@ -258,10 +229,6 @@ EOF
 EOF
         fi
     fi
-else
-    echo "$fPlatform"
-    exit 1
-fi
 
 if (( $# == 1)) ; then
     if [[ $find_flag -eq 1 ]] ; then
@@ -323,27 +290,7 @@ show
   #diff --changed-group-format='%>' --unchanged-group-format='' -I "^.*set.*ENC" "$2" <(echo "$coutput")  
 fi
 
-if [[ $fPlatform == "FGT" ]] 
-then
-    if [[ -z $original_mode ]] ; then
-    # If the console was not standard mode, restore it to more 
-    # -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
-        if [[ $s_pwd_used -eq 1 ]] ; then
-            sshpass -e ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
-            config system console
-                set output more
-            end
-EOF
-        else
-            ssh -p $sshport admin@$1 -T &> /dev/null << 'EOF'
-            config system console
-                set output more
-            end
-EOF
-        fi
-    fi
-elif [[ $fPlatform == "FAD" ]]
-then
+
     if [[ -z $original_mode ]] ; then
     # If the console was not standard mode, restore it to more 
     # -T suppresses pseudo terminal warnings. &> /dev/null dumps the command output
@@ -365,7 +312,3 @@ EOF
 EOF
     fi
     fi
-else
-    echo "$fPlatform"
-    exit 1
-fi
