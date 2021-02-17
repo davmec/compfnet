@@ -14,7 +14,7 @@ function usage {
         echo '│                       /_/                              │'
         echo '└────────────────────────────────────────────────────────┘'
         echo ""
-        echo "Usage: $0 [-p sshport] [-s sshpassword] [-m mode] fnethost [baseline-config-file]"
+        echo "Usage: $0 [-p sshport] [-s sshpassword] [-m mode] [-f 'string'] fnethost [baseline-config-file]"
         echo "       $0 fnethost"
         echo "          - Fetches config from fnethost and writes it to text file fnethost_baseline.txt"
         echo ""            

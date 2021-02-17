@@ -33,7 +33,7 @@ It works with Mac OSX (brew installer):
 │                       /_/                              │
 └────────────────────────────────────────────────────────┘
 
-Usage: ./compfnet.sh [-p sshport] [-s sshpassword] [-m mode] fnethost [baseline-config-file]
+Usage: ./compfnet.sh [-p sshport] [-s sshpassword] [-m mode] [-f 'string'] fnethost [baseline-config-file]
        ./compfnet.sh fnethost
           - Fetches config from fnethost and writes it to text file fnethost_baseline.txt
 
@@ -45,6 +45,7 @@ Usage: ./compfnet.sh [-p sshport] [-s sshpassword] [-m mode] fnethost [baseline-
           -m mod                  In comparison, shows only modified lines
           -m new                  In comparison, shows only added/removed lines(default)
           -m full                 Compare showing also common lines
+          -f 'string'             Find context for config line in running config or baseline. Use single quotes.
 ```
 
 
