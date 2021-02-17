@@ -56,7 +56,7 @@ get system status
         sn_line=`ssh -p "$sshport" "admin@$1" get system status | grep 'Serial-Number'`
     fi
     #echo "debug sn $sn_line"
-    platform=$( echo $sn_line | sed -e 's:.*FAD.*:FAD:' -e 's:.*FGT.*:FGT:')
+    platform=$( echo $sn_line | sed -e 's:.*FAD.*:FAD:' -e 's:.*FG.*:FGT:')
     echo "$platform"
 }
 
