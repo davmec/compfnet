@@ -12,7 +12,7 @@ FortiGate already includes a similar tool in GUI, but the same is not available 
 
 ## Prerequisites 
 Depending on your target platform (FortiADC or FortiGate) you might need to install sshpass to automate SSH password logins.
-You can find instructions to do so in the sshpass github repo: [https://gist.github.com/arunoda/7790979](https://gist.github.com/arunoda/7790979) 
+You can find instructions to do so in the `sshpass` github repo: [https://gist.github.com/arunoda/7790979](https://gist.github.com/arunoda/7790979) 
 
 It works with Mac OSX (brew installer):
 
@@ -60,7 +60,7 @@ Running the command with only the mandatory Fortinet host (IP or hostname) gener
 * <Platform> is the acronym of a Fortinet platform. Currently only FortiGate(FGT) and FortiADC(FAD) supported
 * <Hostname-or-IP> is the exact transcription of the mandatory argument
 
-The generation of the baseline file can be run with the `-p` and or `-s` options. Others are not applicable.
+The generation of the baseline file can be run with the `-p` and or `-s` options. Others are not applicable. The command produces no console output (if everything went well).
 
 Examples:
 
@@ -81,6 +81,15 @@ Note : Password based authenticatoin requires that the tool sshpass is installed
 
 ### Step 3: Run the tool again to check what was changed in the configuration
 
+The following commands output different types of diff output to the console. The compared configurations are: **the one running in the device** and **the selected baseline file**. The file can be any configuration file, but to get the best/meaningful results is recommended to use the same platform (FortiGate or FortiADC) and the same (or closest possible) operating system version.
+
+#### Diff side-by-side
+In case you are not familiar with diff command side-by-side view, this is what it means in the context of this tool:
+
+* `<` indicates it only exists on the left side 'running' (so it was added to running, removed from baseline).  
+* `>` indicates it only exists on the right side 'running' (so it was removed in running, existed in baseline). 
+* `|` indicates lines existing in both, that have been modified.
+
 #### Passwordless
 **Note:** Requires that passwordless authentication config setup is active (in the target Fortinet platform) and configured to accept the default SSH id (public key) for your user (originally stored in the computer where you run the script). 
 
@@ -91,11 +100,49 @@ The examples shown hereafter target a FortiGate where the user key `~/.ssh/rsa_i
 ```
 compfnet.sh -p 122 -m new 10.1.1.10 FGT-10.1.1.10_baseline.txt
 ```
+```
+=========================================================================================
+   diff                          RUNNING FGT CONFIG       < >      FGT-fp3_baseline.txt
+=========================================================================================
+    edit "dc_network"					                   <
+        set uuid 001c2d22-7127-51eb-cc49-f7ab3302218f	   <
+        set subnet 10.20.30.0 255.255.255.0		           <
+    next						                           <
+        set status disable				                   <
+							                               >	    edit 2
+							                               >	        set name "vlan100->Internet"
+							                               >	        set uuid 392d8134-f68d-51ea-b00b-ca7cea090413
+							                               >	        set srcintf "vlan-100"
+							                               >	        set dstintf "port1"
+							                               >	        set srcaddr "vlan-100 address"
+							                               >	        set dstaddr "all"
+							                               >	        set action accept
+							                               >	        set schedule "always"
+							                               >	        set service "ALL"
+							                               >	        set nat enable
+							                               >	    next
+    edit 2						                           <
+        set dst 9.9.9.9 255.255.255.255			           <
+        set gateway 10.11.4.1				               <
+        set device "port5"				                   <
+    next						                           <
+```
 
 * Example 2:  Show only the lines that have been modified.
 
 ```
 compfnet.sh -p 122 -m mod 10.1.1.10 FGT-10.1.1.10_baseline.txt
+```
+```
+Config lines in running config:    11347
+Config lines in baseline FGT-fp3_baseline.txt:    11349
+=========================================================================================
+   diff                          RUNNING FGT CONFIG       < >      FGT-fp3_baseline.txt
+=========================================================================================
+fg-hq1 # #config-version=FGVMK6-6.4.3-FW-build1778-201021:opm |	FortiGate-VM64-KVM # #config-version=FGVMK6-6.4.3-FW-build177
+#conf_file_ver=6552840194967488				      			  |	#conf_file_ver=6552578201962371
+    set hostname "fg-hq1"				      				  |	    set hostname "FortiGate-VM64-KVM"
+        set allowaccess ping https ssh snmp http fgfm radius- |	        set allowaccess ping https ssh http fgfm
 ```
 
 * Example 3:  Show both the lines added/removed and those that have been modified.
@@ -103,14 +150,85 @@ compfnet.sh -p 122 -m mod 10.1.1.10 FGT-10.1.1.10_baseline.txt
 ```
 compfnet.sh -p 122 -m all 10.1.1.10 FGT-10.1.1.10_baseline.txt
 ```
+```
+Config lines in running config:    11347
+Config lines in baseline FGT-fp3_baseline.txt:    11349
+=========================================================================================
+   diff                          RUNNING FGT CONFIG       < >      FGT-fp3_baseline.txt
+=========================================================================================
+fg-hq1 # #config-version=FGVMK6-6.4.3-FW-build1778-201021:opm  | FortiGate-VM64-KVM # #config-version=FGVMK6-6.4.3-FW-build177
+#conf_file_ver=6552840194967488				      			   | #conf_file_ver=6552578201962371
+    set hostname "fg-hq1"				      				   |     set hostname "FortiGate-VM64-KVM"
+        set allowaccess ping https ssh snmp http fgfm radius-  |         set allowaccess ping https ssh http fgfm
+
+
+        edit "dc_network"					                   <
+            set uuid 001c2d22-7127-51eb-cc49-f7ab3302218f	   <
+            set subnet 10.20.30.0 255.255.255.0		           <
+        next						                           <
+            set status disable				                   <
+    							                               >	 edit 2
+    							                               >	     set name "vlan100->Internet"
+    							                               >	     set uuid 392d8134-f68d-51ea-b00b-ca7cea090413
+    							                               >	     set srcintf "vlan-100"
+    							                               >	     set dstintf "port1"
+    							                               >	     set srcaddr "vlan-100 address"
+    							                               >	     set dstaddr "all"
+    							                               >	     set action accept
+    							                               >	     set schedule "always"
+    							                               >	     set service "ALL"
+    							                               >	     set nat enable
+    							                               >	 next
+        edit 2						                           <
+            set dst 9.9.9.9 255.255.255.255			           <
+            set gateway 10.11.4.1				               <
+            set device "port5"				                   <
+        next						                           <
+fg-hq1 # 						                               / FortiGate-VM64-KVM #
+```
+
 
 * Example 4:  Show everything, including lines that are the same in both the running config and the baseline file.
 
 ```
 compfnet.sh -p 122 -m full 10.1.1.10 FGT-10.1.1.10_baseline.txt
 ```
+```
 
-
+Config lines in running config:    11347
+Config lines in baseline FGT-fp3_baseline.txt:    11349
+=========================================================================================
+   diff                          RUNNING FGT CONFIG       < >      FGT-fp3_baseline.txt
+=========================================================================================
+fg-hq1 # #config-version=FGVMK6-6.4.3-FW-build1778-201021:opm | FortiGate-VM64-KVM # #config-version=FGVMK6-6.4.3-FW-build177
+#conf_file_ver=6552840194967488                               | #conf_file_ver=6552578201962371
+#buildno=1778                                                   #buildno=1778
+#global_vdom=1                                                  #global_vdom=1
+config system global                                            config system global
+    set admintimeout 480                                            set admintimeout 480
+    set alias "FortiGate-VM64-KVM"                                  set alias "FortiGate-VM64-KVM"
+    set hostname "fg-hq1"                                     |     set hostname "FortiGate-VM64-KVM"
+    set switch-controller enable                                    set switch-controller enable
+    set timezone 04                                                 set timezone 04
+end                                                             end
+config system accprofile                                        config system accprofile
+    edit "prof_admin"                                               edit "prof_admin"
+        set secfabgrp read-write                                        set secfabgrp read-write
+        set ftviewgrp read-write                                        set ftviewgrp read-write
+        set authgrp read-write                                          set authgrp read-write
+        set sysgrp read-write                                           set sysgrp read-write
+        set netgrp read-write                                           set netgrp read-write
+        set loggrp read-write                                           set loggrp read-write
+        set fwgrp read-write                                            set fwgrp read-write
+        set vpngrp read-write                                           set vpngrp read-write
+.
+.
+.
+(continues till end of the configuration)
+```
+	
+You will probably want to pipe the output of this last option into more ( `| more` ) to go through it.
+	
 #### Password based aunthentication
 
 **Note:** Password based authenticatoin requires that the tool sshpass is installed in the system (in order to automate password based logins).
@@ -150,11 +268,13 @@ compfnet.sh -s fortiadcpwd -p 10103 -m all adc1 FAD-adc1_baseline.txt
 
 
 ## Locating configuration changes in context
-The previous command options will show differences, but those are usually single lines, potentially scattered in the configuration file. If you do not know the context for a particular difference (added/removed or modified line), you can run again the tool as follows: `compfnet.sh -f 'config_line can have spaces' adc [baseline]` . 
+The previous command options will show differences, but those are usually single lines, potentially scattered in the configuration file. If you do not know the context for a particular difference (added/removed or modified line), you can run again the tool as follows: `compfnet.sh -f 'config line can have spaces' adc [baseline]` .  
+
+The idea would be using the lines that were found added, removed or modified (as per previous section commands).
 
 The tool will then display the Fortinet configuration context (or contexts if it appears in serveral places) containing the searched line. This option can be run against the running configuration or the baseline configuration file (depending on where you are expecting to find the corresponding line).
 
-If you run the `-m new`, `-m mod` or `-m all` comparisons, the running config will be displayed in the left and the baseline on the right. This way you can know where to search for the line (added or modified). 
+If you run the `-m new`, `-m mod` or `-m all` comparisons, the running config will be displayed in the left and the baseline on the right. This way you can know where to search for the line (added or modified).  Reminder:
 
 * `<` indicates it only exists on the left side 'running' (so it was added to running, removed from baseline).  
 * `>` indicates it only exists on the right side 'running' (so it was removed in running, existed in baseline). 
@@ -180,9 +300,91 @@ compfnet.sh -s fortiadcpwd -p 10103 -m all -f adc1
 ```
  compfnet.sh -f 'security' fgt-hq | more
 ```
-* If the context filtering skipped something you want to see, or you want to check the context for both running and baseline side-by-side, you can pipe the command comparison (with `-m full` option) into `grep` with `-A n` (after match), `-B n` (before match) or `-C n` (after and before) options (with `n` the number of context lines to display). Usually the match(es) is(are) highlighted in colour and the `--` in the output indicates that there are lines not displayed between matches.  
+```
+        set security-mode captive-portal
+        set device-identification enable
+        set snmp-index 10
+        set switch-controller-access-vlan enable
+        set switch-controller-feature nac
+        set interface "fortilink"
+        set vlanid 4089
+    next
+    edit "vlan666"
+        set vdom "root"
+        set ip 10.6.66.254 255.255.255.0
+        set device-identification enable
+        set role lan
+        set snmp-index 11
+        set interface "fortilink"
+        set vlanid 666
+    next
+    edit "vlan-100"
+        set vdom "root"
+        set ip 10.100.0.254 255.255.255.0
+        set allowaccess ping https ssh http
+        set device-identification enable
+        set role lan
+        set snmp-index 12
+        set interface "fortilink"
+        set vlanid 100
+    next
+end
+config system email-server
+    set server "notification.fortinet.net"
+    set port 465
+    set security smtps
+end
+config switch-controller security-policy 802-1X
+    edit "802-1X-policy-default"
+        set user-group "SSO_Guest_Users"
+        set mac-auth-bypass disable
+        set open-auth disable
+        set eap-passthru enable
+        set eap-auto-untagged-vlans enable
+        set guest-vlan disable
+        set auth-fail-vlan disable
+        set framevid-apply enable
+        set radius-timeout-overwrite disable
+        set authserver-timeout-vlan disable
+    next
+end
+config switch-controller security-policy local-access
+    edit "default"
+        set mgmt-allowaccess https ping ssh
+        set internal-allowaccess https ping ssh
+    next
+:    
+```
+
+* If the context filtering skipped something you want to see, or you want to check the context for both running and baseline side-by-side, you can pipe the command comparison (with `-m full` option) into `grep` with `-A n` (after match), `-B n` (before match) or `-C n` (after and before) options (with `n` the number of context lines to display). A simple regular expression can include the characters used to indicate insertion/deletion/modification ( < > | ) to go to those interesting lines.
+
+ Usually the match(es) is(are) highlighted in colour and the `--` in the output indicates that there are lines not displayed between matches.  
+ 
+ The sample here tries to find about that lonely 'set status disable' found in Passwordless examples.
 
 ```
- compfnet.sh fgt-hq -m full | grep -C 2 dns
+ compfnet.sh -p 122 -m full 10.1.1.10 FGT-10.1.1.10_baseline.txt | grep -C 10 'set status disable.*<'
 ```
-
+```
+            config max-range-segment				            config max-range-segment
+                set status enable				                        set status enable
+                set log enable					                        set log enable
+                set severity high				                        set severity high
+            end							                                end
+        end							                                end
+    next							                            next
+end								                            end
+config firewall policy						                config firewall policy
+    edit 1							                            edit 1
+        set status disable				                 <
+        set name "vlan666 to internet"				        set name "vlan666 to internet"
+        set uuid 2ce20830-f680-51ea-a7b3-cd0525540db3	    set uuid 2ce20830-f680-51ea-a7b3-cd0525540db3
+        set srcintf "vlan666"					            set srcintf "vlan666"
+        set dstintf "port1"					                set dstintf "port1"
+        set srcaddr "vlan666 address"				        set srcaddr "vlan666 address"
+        set dstaddr "all"					                set dstaddr "all"
+        set action accept					                set action accept
+        set schedule "always"					            set schedule "always"
+        set service "ALL"					                set service "ALL"
+        set nat enable						                set nat enable
+```

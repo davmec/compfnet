@@ -222,13 +222,13 @@ EOF
 elif [[ $fPlatform == "FAD" ]]
 then
     if [[ $s_pwd_used -eq 1 ]] ; then
-        mode=`sshpass -e ssh -p $sshport admin@$1 -T << 'EOF'
+        mode=`sshpass -e ssh -p $sshport admin@$1 -T 2> /dev/null << 'EOF'
         config global
         show system console 
 EOF
 `
     else
-        mode=`ssh -p $sshport admin@$1 -T << 'EOF'
+        mode=`ssh -p $sshport admin@$1 -T 2> /dev/null << 'EOF'
         config global
         show system console 
 EOF
