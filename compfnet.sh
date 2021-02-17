@@ -43,16 +43,16 @@ function getPlatform
 {
     local platform="Unsupported"
     local sn_line=""
-if [[ $s_pwd_used -eq 1 ]] ; then
+    if [[ $s_pwd_used -eq 1 ]] ; then
         sn_line=`sshpass -e ssh -p $sshport admin@$1 -T << !
 get system status
 !
 `
         sn_line=`echo "$sn_line" | grep 'Serial-Number'`
-else
+    else
         sn_line=`ssh -p "$sshport" "admin@$1" get system status | grep 'Serial-Number'`
-fi
-#    echo "debug sn $sn_line"
+    fi
+    #echo "debug sn $sn_line"
     platform=$( echo $sn_line | sed -e 's:.*FAD.*:FAD:' -e 's:.*FGT.*:FGT:')
     echo "$platform"
 }
@@ -84,20 +84,7 @@ N
 }"
 fi
 
-sed_args2="/edit/{
-:a
-N
-/next/\!ba
-/$conf_line/p
-}"
-
 sed_args=$(sed 's/\\!/!/g' <<< "$sed_args")
-sed_args2=$(sed 's/\\!/!/g' <<< "$sed_args2")
-#sed_args=$(sed 's/-/\-/g' <<< "$sed_args")
-#sed_args=$(sed 's/\"/\\"/g' <<< "$sed_args")
-
-
-#echo  "sed args $sed_args"
 
 if (( $# == 0)) ; then
 # if the file argument was not provided or does not exist, go for running
@@ -114,27 +101,17 @@ show
     echo "---- Searching RUNNING CONFIG for $conf_line ----"
     echo ""
     result=`sed -nE "$sed_args" <<< "$running"`
-    if [[ $result == "" ]] ; then
-        sed -nE "$sed_args2" <<< "$running"
-    else
-        echo "$result"
-    fi
+    echo "$result"
 elif (( $# == 1)) ; then
     file=$1
     echo "---- Searching FILE $file for $conf_line ----"
     echo ""
     sed -nE "$sed_args" $file
-    if [[ $result == "" ]] ; then
-        sed -nE "$sed_args2" $file
-    else
-        echo "$result"
-    fi
+    echo "$result"
 else
     echo "Wrong number of arguments passed to $0. It takes one or two."
     exit 1
 fi
-#echo "grep"
-#echo "$running" | grep -A  5 "$conf_line"
 }
 
 # A POSIX variable
