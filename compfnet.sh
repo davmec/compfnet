@@ -59,59 +59,59 @@ get system status
 
 function printContext
 {
-# Prints full config-end context for indicated line
-# In running config or file (when second arg supplied and valid file)    
-local conf_line=$find_string
-local running_conf=""
-local file=""
+    # Prints full config-end context for indicated line
+    # In running config or file (when second arg supplied and valid file)    
+    local conf_line=$find_string
+    local running_conf=""
+    local file=""
 
-if [[ $fPlatform == "FGT" ]] ; then
-#    echo "-f option not supported in this platform: $fPlatform"
-#    exit 1
-sed_args="/^config/{
+    if [[ $fPlatform == "FGT" ]] ; then
+    #    echo "-f option not supported in this platform: $fPlatform"
+    #    exit 1
+    sed_args="/^config/{
 :a
 N
 /end/\!ba
 /$conf_line/p
 }"
-else
-#preparing sed arguments with searched conf_line
-sed_args="/config/{
+    else
+    #preparing sed arguments with searched conf_line
+    sed_args="/config/{
 :a
 N
 /end/\!ba
 /$conf_line/p
 }"
-fi
+    fi
 
-sed_args=$(sed 's/\\!/!/g' <<< "$sed_args")
+    sed_args=$(sed 's/\\!/!/g' <<< "$sed_args")
 
-if (( $# == 0)) ; then
-# if the file argument was not provided or does not exist, go for running
-    if [[ $s_pwd_used -eq 1 ]] ; then
-        running=$(sshpass -e ssh -p $sshport admin@$fnhost -T << !
+    if (( $# == 0)) ; then
+    # if the file argument was not provided or does not exist, go for running
+        if [[ $s_pwd_used -eq 1 ]] ; then
+            running=$(sshpass -e ssh -p $sshport admin@$fnhost -T << !
 show
 !
 )
+        else
+            running=$(ssh -p "$sshport" "admin@$fnhost" 'show')
+        fi
+        # sed has to scan data from variable instead of file in this case
+        # Searsching for 
+        echo "---- Searching RUNNING CONFIG for $conf_line ----"
+        echo ""
+        result=`sed -nE "$sed_args" <<< "$running"`
+        echo "$result"
+    elif (( $# == 1)) ; then
+        file=$1
+        echo "---- Searching FILE $file for $conf_line ----"
+        echo ""
+        sed -nE "$sed_args" $file
+        echo "$result"
     else
-        running=$(ssh -p "$sshport" "admin@$fnhost" 'show')
+        echo "Wrong number of arguments passed to $0. It takes one or two."
+        exit 1
     fi
-    # sed has to scan data from variable instead of file in this case
-    # Searsching for 
-    echo "---- Searching RUNNING CONFIG for $conf_line ----"
-    echo ""
-    result=`sed -nE "$sed_args" <<< "$running"`
-    echo "$result"
-elif (( $# == 1)) ; then
-    file=$1
-    echo "---- Searching FILE $file for $conf_line ----"
-    echo ""
-    sed -nE "$sed_args" $file
-    echo "$result"
-else
-    echo "Wrong number of arguments passed to $0. It takes one or two."
-    exit 1
-fi
 }
 
 # A POSIX variable
