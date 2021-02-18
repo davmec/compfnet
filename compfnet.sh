@@ -83,11 +83,15 @@ N
 :a
 N
 /end/\!ba
-/$conf_line/p
+/$conf_line/l
 }"
     fi
 
     sed_args=$(sed 's/\\!/!/g' <<< "$sed_args")
+
+  #  sed_args2=$(sed 's/\\!/!/g' <<< "$sed_args2")
+
+    echo "$sed_args"
 
     if (( $# == 0)) ; then
     # if the file argument was not provided or does not exist, go for running
