@@ -18,6 +18,10 @@ It works with Mac OSX (brew installer):
 
 `brew install esolitos/ipa/sshpass`
 
+The latest version of Bash is also recommeded (as Mac OSX switched to zsh and ships with some old version). You can safely install it with brew:
+
+`brew install bash`
+
 
 
 ## Usage
