@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>README</title>
+
+
+<style type="text/css">
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb
+}
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+  body {
+    padding: 2cm; 
+  }
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h1 id="toc_0">compfnet</h1>
+
+<p>Script to diff compare running configuration to previously save configuration baseline(s) in Fortinet appliances. Only FortiGate and FortiADC supported for now.</p>
+
+<p>User admin assumed by default.</p>
+
+<h2 id="toc_1">Motivation</h2>
+
+<p>The tool is wrapping around UNIX diff commonly available in Linux distros and Mac OSX by default. </p>
+
+<p>The practicality of it relates to the capability to easily get a summary of changes with respect to a previous configuration after a &quot;network debugging&quot; or tuning session with FortiADC or FortiGate. The FortiADC and FortiGate configuration files can be dauntingly long and it can be hard to spot any changes that have been made (and forgotten) during a long config session. </p>
+
+<p>FortiGate already includes a similar tool in GUI, but the same is not available in FortiADC (at the moment of this writing). It can also come handy when one of the parties configuring or checking configuration only has CLI access to the platform.</p>
+
+<h2 id="toc_2">Prerequisites</h2>
+
+<p>Depending on your target platform (FortiADC or FortiGate) you might need to install sshpass to automate SSH password logins.
+You can find instructions to do so in the <code>sshpass</code> github repo: <a href="https://gist.github.com/arunoda/7790979">https://gist.github.com/arunoda/7790979</a> </p>
+
+<p>It works with Mac OSX (brew installer):</p>
+
+<p><code>brew install esolitos/ipa/sshpass</code></p>
+
+<p>The latest version of Bash is also recommeded (as Mac OSX switched to zsh and ships with some old version). You can safely install it with brew:</p>
+
+<p><code>brew install bash</code></p>
+
+<h2 id="toc_3">Usage</h2>
+
+<p><code>./compfnet.sh</code></p>
+
+<div><pre><code class="language-bash">┌────────────────────────────────────────────────────────┐
+│                                  ____           __     │
+│      _________  ____ ___  ____  / __/___  ___  / /_    │
+│     / ___/ __ \/ __ `__ \/ __ \/ /_/ __ \/ _ \/ __/    │
+│    / /__/ /_/ / / / / / / /_/ / __/ / / /  __/ /_      │
+│    \___/\____/_/ /_/ /_/ .___/_/ /_/ /_/\___/\__/      │
+│                       /_/                              │
+└────────────────────────────────────────────────────────┘
+
+Usage: ./compfnet.sh [-p sshport] [-s sshpassword] [-m mode] [-f &#39;string&#39;] fnethost [baseline-config-file]
+       ./compfnet.sh fnethost
+          - Fetches config from fnethost and writes it to text file fnethost_baseline.txt
+
+       OPTIONS:
+          -p sshport              Sets SSH port to other than default 22
+          -s sshpassword          Sets SSH password when public key auth not available. Requires sshpass
+          baseline-config-file    Fetches config from fnethost and diff compares it to baseline-config-file
+          -m all                  In comparison, shows all differences side by side
+          -m mod                  In comparison, shows only modified lines
+          -m new                  In comparison, shows only added/removed lines(default)
+          -m full                 Compare showing also common lines
+          -f &#39;string&#39;             Find context for config line in running config or baseline. Use single quotes.</code></pre></div>
+
+<h2 id="toc_4">Common Uses (Examples)</h2>
+
+<p>Just a few examples of the intended use for the tool.</p>
+
+<h3 id="toc_5">Step 1: Generate the baseline configuration file</h3>
+
+<p>Running the command with only the mandatory Fortinet host (IP or hostname) generates a baseline configuration (based on the current configuration) with automatic naming to <code>&lt;Platform&gt;-&lt;Hostname-or-IP&gt;_baseline.txt</code>, where:</p>
+
+<ul>
+<li><code>&lt;Platform&gt;</code> is the acronym of a Fortinet platform. Currently only FortiGate(FGT) and FortiADC(FAD) supported</li>
+<li><code>&lt;Hostname-or-IP&gt;</code> is the exact transcription of the mandatory argument</li>
+</ul>
+
+<p>When the same baseline file exists, it allows to preserve it, by saving a new baseline with an added timestamp, by answering N to this question (example for <code>FAD-fp2_baseline.txt</code>):</p>
+
+<div><pre><code class="language-none">--- WARNING: Baseline file FAD-fp2_baseline.txt found. ---
+Overwrite with current running config: /Yes/No/Quit (Y/N/Q)? n</code></pre></div>
+
+<div><pre><code class="language-none"># ll FAD-fp2_baseline.*
+-rw-r--r--  1 dpa  staff    25K Feb 18 15:52 FAD-fp2_baseline.11-52:15-18-02-2021.txt
+-rw-r--r--  1 dpa  staff    25K Feb 18 15:52 FAD-fp2_baseline.35-52:15-18-02-2021.txt
+-rw-r--r--  1 dpa  staff    25K Feb 18 15:52 FAD-fp2_baseline.42-52:15-18-02-2021.txt
+-rw-r--r--@ 1 dpa  staff    25K Feb 18 15:53 FAD-fp2_baseline.txt</code></pre></div>
+
+<p>The generation of the baseline file can be run with the <code>-p</code> and or <code>-s</code> options. Others are not applicable. The command produces no console output (if everything went well).</p>
+
+<p>Examples:</p>
+
+<ul>
+<li>Option 1: Passwordless login to host 10.1.1.10, using default SSH port 22. Requires that passwordless authentication config setup is active (only available in FortiGate at the time of this writing) to accept the default SSH id for your user in the computer where you run the script.</li>
+</ul>
+
+<div><pre><code class="language-none">compfnet.sh 10.1.1.10 </code></pre></div>
+
+<ul>
+<li>Option 2: Using password based authentication instead of the default SSH rsa key of the system running the script. Currently, this is your only choice if you are using a FortiADC. SSH port set to 14050.</li>
+</ul>
+
+<div><pre><code class="language-none">compfnet.sh -s fadpassword -p 14050 10.1.1.10 </code></pre></div>
+
+<p>Note : Password based authenticatoin requires that the tool sshpass is installed in the system (in order to automate password based logins). </p>
+
+<h3 id="toc_6">Step 2: Do some configuration changes to your FortiGate or FortiADC via CLI or GUI</h3>
+
+<h3 id="toc_7">Step 3: Run the tool again to check what was changed in the configuration</h3>
+
+<p>The following commands output different types of diff output to the console. The compared configurations are: <strong>the one running in the device</strong> and <strong>the selected baseline file</strong>. The file can be any configuration file, but to get the best/meaningful results is recommended to use the same platform (FortiGate or FortiADC) and the same (or closest possible) operating system version.</p>
+
+<h4 id="toc_8">Diff side-by-side</h4>
+
+<p>In case you are not familiar with diff command side-by-side view, this is what it means in the context of this tool:</p>
+
+<ul>
+<li><code>&lt;</code> indicates it only exists on the left side &#39;running&#39; (so it was added to running, removed from baseline).<br></li>
+<li><code>&gt;</code> indicates it only exists on the right side &#39;running&#39; (so it was removed in running, existed in baseline). </li>
+<li><code>|</code> indicates lines existing in both, that have been modified.</li>
+</ul>
+
+<h4 id="toc_9">Passwordless</h4>
+
+<p><strong>Note:</strong> Requires that passwordless authentication config setup is active (in the target Fortinet platform) and configured to accept the default SSH id (public key) for your user (originally stored in the computer where you run the script). </p>
+
+<p>The examples shown hereafter target a FortiGate where the user key <code>~/.ssh/rsa_id.pub</code> has been authorized and SSH service is running in TCP port 122. </p>
+
+<ul>
+<li>Example 1:  Show only the lines that have been added or removed. This is the default.</li>
+</ul>
+
+<div><pre><code class="language-none">compfnet.sh -p 122 -m new 10.1.1.10 FGT-10.1.1.10_baseline.txt</code></pre></div>
+
+<div><pre><code class="language-none">=========================================================================================
+   diff                          RUNNING FGT CONFIG       &lt; &gt;      FGT-fp3_baseline.txt
+=========================================================================================
+    edit &quot;dc_network&quot;                                      &lt;
+        set uuid 001c2d22-7127-51eb-cc49-f7ab3302218f      &lt;
+        set subnet 10.20.30.0 255.255.255.0                &lt;
+    next                                                   &lt;
+        set status disable                                 &lt;
+                                                           &gt;        edit 2
+                                                           &gt;            set name &quot;vlan100-&gt;Internet&quot;
+                                                           &gt;            set uuid 392d8134-f68d-51ea-b00b-ca7cea090413
+                                                           &gt;            set srcintf &quot;vlan-100&quot;
+                                                           &gt;            set dstintf &quot;port1&quot;
+                                                           &gt;            set srcaddr &quot;vlan-100 address&quot;
+                                                           &gt;            set dstaddr &quot;all&quot;
+                                                           &gt;            set action accept
+                                                           &gt;            set schedule &quot;always&quot;
+                                                           &gt;            set service &quot;ALL&quot;
+                                                           &gt;            set nat enable
+                                                           &gt;        next
+    edit 2                                                 &lt;
+        set dst 9.9.9.9 255.255.255.255                    &lt;
+        set gateway 10.11.4.1                              &lt;
+        set device &quot;port5&quot;                                 &lt;
+    next                                                   &lt;</code></pre></div>
+
+<ul>
+<li>Example 2:  Show only the lines that have been modified.</li>
+</ul>
+
+<div><pre><code class="language-none">compfnet.sh -p 122 -m mod 10.1.1.10 FGT-10.1.1.10_baseline.txt</code></pre></div>
+
+<div><pre><code class="language-none">Config lines in running config:    11347
+Config lines in baseline FGT-fp3_baseline.txt:    11349
+=========================================================================================
+   diff                          RUNNING FGT CONFIG       &lt; &gt;      FGT-fp3_baseline.txt
+=========================================================================================
+fg-hq1 # #config-version=FGVMK6-6.4.3-FW-build1778-201021:opm | FortiGate-VM64-KVM # #config-version=FGVMK6-6.4.3-FW-build177
+#conf_file_ver=6552840194967488                               | #conf_file_ver=6552578201962371
+    set hostname &quot;fg-hq1&quot;                                     |     set hostname &quot;FortiGate-VM64-KVM&quot;
+        set allowaccess ping https ssh snmp http fgfm radius- |         set allowaccess ping https ssh http fgfm</code></pre></div>
+
+<ul>
+<li>Example 3:  Show both the lines added/removed and those that have been modified.</li>
+</ul>
+
+<div><pre><code class="language-none">compfnet.sh -p 122 -m all 10.1.1.10 FGT-10.1.1.10_baseline.txt</code></pre></div>
+
+<div><pre><code class="language-none">Config lines in running config:    11347
+Config lines in baseline FGT-fp3_baseline.txt:    11349
+=========================================================================================
+   diff                          RUNNING FGT CONFIG       &lt; &gt;      FGT-fp3_baseline.txt
+=========================================================================================
+fg-hq1 # #config-version=FGVMK6-6.4.3-FW-build1778-201021:opm  | FortiGate-VM64-KVM # #config-version=FGVMK6-6.4.3-FW-build177
+#conf_file_ver=6552840194967488                                | #conf_file_ver=6552578201962371
+    set hostname &quot;fg-hq1&quot;                                      |     set hostname &quot;FortiGate-VM64-KVM&quot;
+        set allowaccess ping https ssh snmp http fgfm radius-  |         set allowaccess ping https ssh http fgfm
+
+
+        edit &quot;dc_network&quot;                                      &lt;
+            set uuid 001c2d22-7127-51eb-cc49-f7ab3302218f      &lt;
+            set subnet 10.20.30.0 255.255.255.0                &lt;
+        next                                                   &lt;
+            set status disable                                 &lt;
+                                                               &gt;     edit 2
+                                                               &gt;         set name &quot;vlan100-&gt;Internet&quot;
+                                                               &gt;         set uuid 392d8134-f68d-51ea-b00b-ca7cea090413
+                                                               &gt;         set srcintf &quot;vlan-100&quot;
+                                                               &gt;         set dstintf &quot;port1&quot;
+                                                               &gt;         set srcaddr &quot;vlan-100 address&quot;
+                                                               &gt;         set dstaddr &quot;all&quot;
+                                                               &gt;         set action accept
+                                                               &gt;         set schedule &quot;always&quot;
+                                                               &gt;         set service &quot;ALL&quot;
+                                                               &gt;         set nat enable
+                                                               &gt;     next
+        edit 2                                                 &lt;
+            set dst 9.9.9.9 255.255.255.255                    &lt;
+            set gateway 10.11.4.1                              &lt;
+            set device &quot;port5&quot;                                 &lt;
+        next                                                   &lt;
+fg-hq1 #                                                       / FortiGate-VM64-KVM #</code></pre></div>
+
+<ul>
+<li>Example 4:  Show everything, including lines that are the same in both the running config and the baseline file.</li>
+</ul>
+
+<div><pre><code class="language-none">compfnet.sh -p 122 -m full 10.1.1.10 FGT-10.1.1.10_baseline.txt</code></pre></div>
+
+<div><pre><code class="language-none">
+Config lines in running config:    11347
+Config lines in baseline FGT-fp3_baseline.txt:    11349
+=========================================================================================
+   diff                          RUNNING FGT CONFIG       &lt; &gt;      FGT-fp3_baseline.txt
+=========================================================================================
+fg-hq1 # #config-version=FGVMK6-6.4.3-FW-build1778-201021:opm | FortiGate-VM64-KVM # #config-version=FGVMK6-6.4.3-FW-build177
+#conf_file_ver=6552840194967488                               | #conf_file_ver=6552578201962371
+#buildno=1778                                                   #buildno=1778
+#global_vdom=1                                                  #global_vdom=1
+config system global                                            config system global
+    set admintimeout 480                                            set admintimeout 480
+    set alias &quot;FortiGate-VM64-KVM&quot;                                  set alias &quot;FortiGate-VM64-KVM&quot;
+    set hostname &quot;fg-hq1&quot;                                     |     set hostname &quot;FortiGate-VM64-KVM&quot;
+    set switch-controller enable                                    set switch-controller enable
+    set timezone 04                                                 set timezone 04
+end                                                             end
+config system accprofile                                        config system accprofile
+    edit &quot;prof_admin&quot;                                               edit &quot;prof_admin&quot;
+        set secfabgrp read-write                                        set secfabgrp read-write
+        set ftviewgrp read-write                                        set ftviewgrp read-write
+        set authgrp read-write                                          set authgrp read-write
+        set sysgrp read-write                                           set sysgrp read-write
+        set netgrp read-write                                           set netgrp read-write
+        set loggrp read-write                                           set loggrp read-write
+        set fwgrp read-write                                            set fwgrp read-write
+        set vpngrp read-write                                           set vpngrp read-write
+.
+.
+.
+(continues till end of the configuration)</code></pre></div>
+
+<p>You will probably want to pipe the output of this last option into more ( <code>| more</code> ) to go through it.</p>
+
+<h4 id="toc_10">Password based aunthentication</h4>
+
+<p><strong>Note:</strong> Password based authenticatoin requires that the tool sshpass is installed in the system (in order to automate password based logins).</p>
+
+<p>The examples shown in this section target a FortiADC with SSH admin password fortiadcpwd. SSH is running in the default port 22. FortiADC management IP (10.0.2.10) has been mapped in /etc/hosts to adc1. IP address can also be used instead of hostname, as in the previous section examples.</p>
+
+<ul>
+<li>Example 1:  Show only the lines that have been added or removed. This is the default.</li>
+</ul>
+
+<div><pre><code class="language-none">compfnet.sh -s fortiadcpwd -m new adc1 FAD-adc1_baseline.txt</code></pre></div>
+
+<div><pre><code class="language-none">Config lines in running config:     1080
+Config lines in baseline FAD-fp2_baseline.txt:     1083
+=========================================================================================
+   diff                          RUNNING FAD CONFIG       &lt; &gt;      FAD-fp2_baseline.txt
+=========================================================================================                                                           &gt;     edit 3
+                                                            &gt;       set interface port3
+                                                            &gt;       set port 443
+                                                            &gt;       set max-packet-count 300
+                                                            &gt;     next
+                                                            &gt;     edit &quot;test&quot;
+                                                            &gt;       set real-server-ssl-profile NONE
+                                                            &gt;       config  pool_member
+                                                            &gt;       end
+                                                            &gt;     next
+  edit &quot;empty_pool&quot;                                         &lt;
+    set health-check-ctrl enable                            &lt;
+    set health-check-list LB_HLTHCK_ICMP                    &lt;
+    set real-server-ssl-profile NONE                        &lt;
+    config  pool_member                                     &lt;
+    end                                                     &lt;
+  next                                                      &lt;
+FortiADC-KVM #                            / FortiADC-KVM #</code></pre></div>
+
+<ul>
+<li>Example 2:  Show only the lines that have been modified.</li>
+</ul>
+
+<div><pre><code class="language-none">compfnet.sh -s fortiadcpwd -m mod adc1 FAD-adc1_baseline.txt</code></pre></div>
+
+<div><pre><code class="language-none">Config lines in running config:     1080
+Config lines in baseline FAD-fp2_baseline.txt:     1083
+=========================================================================================
+   diff                          RUNNING FAD CONFIG       &lt; &gt;      FAD-fp2_baseline.txt
+=========================================================================================
+    set allowaccess https ping ssh http                     |       set allowaccess https ping http
+    set allowaccess ping snmp                               |       set allowaccess ping</code></pre></div>
+
+<ul>
+<li>Example 3:  Show both the lines added/removed and those that have been modified.</li>
+</ul>
+
+<div><pre><code class="language-none">compfnet.sh -s fortiadcpwd -m all adc1 FAD-adc1_baseline.txt</code></pre></div>
+
+<div><pre><code class="language-none">Config lines in running config:     1080
+Config lines in baseline FAD-fp2_baseline.txt:     1083
+=========================================================================================
+   diff                          RUNNING FAD CONFIG       &lt; &gt;      FAD-fp2_baseline.txt
+=========================================================================================
+    set allowaccess https ping ssh http                     |       set allowaccess https ping http
+    set allowaccess ping snmp                               |       set allowaccess ping
+                                                            &gt;     edit 3
+                                                            &gt;       set interface port3
+                                                            &gt;       set port 443
+                                                            &gt;       set max-packet-count 300
+                                                            &gt;     next
+                                                            &gt;     edit &quot;test&quot;
+                                                            &gt;       set real-server-ssl-profile NONE
+                                                            &gt;       config  pool_member
+                                                            &gt;       end
+                                                            &gt;     next
+  edit &quot;empty_pool&quot;                                         &lt;
+    set health-check-ctrl enable                            &lt;
+    set health-check-list LB_HLTHCK_ICMP                    &lt;
+    set real-server-ssl-profile NONE                        &lt;
+    config  pool_member                                     &lt;
+    end                                                     &lt;
+  next                                                      &lt;
+FortiADC-KVM #                            / FortiADC-KVM #</code></pre></div>
+
+<ul>
+<li>Example 4:  Show everything, including lines that are the same in both the running config and the baseline file.</li>
+</ul>
+
+<div><pre><code class="language-none">compfnet.sh -s fortiadcpwd -m full adc1 FAD-adc1_baseline.txt</code></pre></div>
+
+<div><pre><code class="language-none">Config lines in running config:     1080
+Config lines in baseline FAD-fp2_baseline.txt:     1083
+=========================================================================================
+   diff                          RUNNING FAD CONFIG       &lt; &gt;      FAD-fp2_baseline.txt
+=========================================================================================
+FortiADC-KVM # config system global                             FortiADC-KVM # config system global
+  set hostname FortiADC-KVM                                       set hostname FortiADC-KVM
+end                                                             end
+config system traffic-group                                     config system traffic-group
+end                                                             end
+config system interface                                         config system interface
+  edit &quot;port1&quot;                                                    edit &quot;port1&quot;
+    set vdom root                                                   set vdom root
+    set ip 10.9.8.2/24                                              set ip 10.9.8.2/24
+    set allowaccess https ping ssh http telnet                      set allowaccess https ping ssh http telnet
+    config  ha-node-ip-list                                         config  ha-node-ip-list
+    end                                                             end
+  next                                                            next
+  edit &quot;port2&quot;                                                    edit &quot;port2&quot;
+    set vdom root                                                   set vdom root
+    set ip 10.11.12.1/24                                            set ip 10.11.12.1/24
+    set allowaccess https ping ssh http                       |     set allowaccess https ping http
+    config  ha-node-ip-list                                         config  ha-node-ip-list
+    end                                                             end
+.
+.
+.
+(continues till end of the configuration)</code></pre></div>
+
+<ul>
+<li>Example 5:  Show both the lines added/removed and those that have been modified. Now using a custom SSH port. Especially useful if you target port forwarded hosts, like FortiADC in FortiPoC.</li>
+</ul>
+
+<div><pre><code class="language-none">compfnet.sh -s fortiadcpwd -p 10103 -m all adc1 FAD-adc1_baseline.txt</code></pre></div>
+
+<p>Similar output to example 3.</p>
+
+<h2 id="toc_11">Locating configuration changes in context</h2>
+
+<p>The previous command options will show differences, but those are usually single lines, potentially scattered in the configuration file. If you do not know the context for a particular difference (added/removed or modified line), you can run again the tool as follows: <code>compfnet.sh -f &#39;config line can have spaces&#39; adc [baseline]</code> .  </p>
+
+<p>The idea would be using the lines that were found added, removed or modified (as per previous section commands).</p>
+
+<p>The tool will then display the Fortinet configuration context (or contexts if it appears in serveral places) containing the searched line. This option can be run against the running configuration or the baseline configuration file (depending on where you are expecting to find the corresponding line).</p>
+
+<p>If you run the <code>-m new</code>, <code>-m mod</code> or <code>-m all</code> comparisons, the running config will be displayed in the left and the baseline on the right. This way you can know where to search for the line (added or modified).  Reminder:</p>
+
+<ul>
+<li><code>&lt;</code> indicates it only exists on the left side &#39;running&#39; (so it was added to running, removed from baseline).<br></li>
+<li><code>&gt;</code> indicates it only exists on the right side &#39;running&#39; (so it was removed in running, existed in baseline). </li>
+<li><code>|</code> indicates lines existing in both, that have been modified.</li>
+</ul>
+
+<h3 id="toc_12">Searching for context in running config line change</h3>
+
+<p>Let us try get context for the found &quot;modified&quot; line from Example 2 or 3 in the previous section <code>set allowaccess https ping ssh http</code></p>
+
+<div><pre><code class="language-none">compfnet.sh -s fortiadcpwd -p 10103 -f &#39;set allowaccess https ping ssh http&#39; adc1 </code></pre></div>
+
+<div><pre><code class="language-none">---- Searching RUNNING CONFIG for &#39;set allowaccess https ping ssh http&#39; ----
+
+config system interface
+  edit &quot;port1&quot;
+    set vdom root
+    set ip 10.9.8.2/24
+    set allowaccess https ping ssh http telnet
+    config  ha-node-ip-list
+    end</code></pre></div>
+
+<h3 id="toc_13">Searching for context in baseline config line change</h3>
+
+<p>Let us search now for something that was deleted from the baseline file (according to previous section) like <code>max-packet-count 300</code></p>
+
+<div><pre><code class="language-none">compfnet.sh -s fortiadcpwd -p 10103 -f &#39;max-packet-count &#39;adc1 </code></pre></div>
+
+<div><pre><code class="language-none">---- Searching RUNNING CONFIG for &#39;max-packet-count 300&#39; ----
+
+config system tcpdump
+  edit 2
+    set interface port1
+    set host 10.11.12.0/24
+    set port 80
+    set max-packet-count 4000
+  next
+  edit 3
+    set interface port3
+    set port 443
+    set max-packet-count 300
+  next
+  edit 4
+    set interface port1
+    set host 10.9.8.0/24
+    set port 80
+    set max-packet-count 200
+  next
+  edit 1
+    set interface port1
+    set host 10.9.8.0/24
+    set max-packet-count 300
+  next
+end</code></pre></div>
+
+<h3 id="toc_14">Tips and other ways to see config context</h3>
+
+<ul>
+<li>If the output of the previous context commands is still too long it might overrun your terminal scrolling capacity or simply make you miss something.  You can fix that by piping the output of the command into more. Example:</li>
+</ul>
+
+<div><pre><code class="language-none"> compfnet.sh -f &#39;security&#39; fgt-hq | more</code></pre></div>
+
+<div><pre><code class="language-none">        set security-mode captive-portal
+        set device-identification enable
+        set snmp-index 10
+        set switch-controller-access-vlan enable
+        set switch-controller-feature nac
+        set interface &quot;fortilink&quot;
+        set vlanid 4089
+    next
+    edit &quot;vlan666&quot;
+        set vdom &quot;root&quot;
+        set ip 10.6.66.254 255.255.255.0
+        set device-identification enable
+        set role lan
+        set snmp-index 11
+        set interface &quot;fortilink&quot;
+        set vlanid 666
+    next
+    edit &quot;vlan-100&quot;
+        set vdom &quot;root&quot;
+        set ip 10.100.0.254 255.255.255.0
+        set allowaccess ping https ssh http
+        set device-identification enable
+        set role lan
+        set snmp-index 12
+        set interface &quot;fortilink&quot;
+        set vlanid 100
+    next
+end
+config system email-server
+    set server &quot;notification.fortinet.net&quot;
+    set port 465
+    set security smtps
+end
+config switch-controller security-policy 802-1X
+    edit &quot;802-1X-policy-default&quot;
+        set user-group &quot;SSO_Guest_Users&quot;
+        set mac-auth-bypass disable
+        set open-auth disable
+        set eap-passthru enable
+        set eap-auto-untagged-vlans enable
+        set guest-vlan disable
+        set auth-fail-vlan disable
+        set framevid-apply enable
+        set radius-timeout-overwrite disable
+        set authserver-timeout-vlan disable
+    next
+end
+config switch-controller security-policy local-access
+    edit &quot;default&quot;
+        set mgmt-allowaccess https ping ssh
+        set internal-allowaccess https ping ssh
+    next
+:    </code></pre></div>
+
+<ul>
+<li><p>If the context filtering skipped something you want to see, or you want to check the context for both running and baseline side-by-side, you can pipe the command comparison (with <code>-m full</code> option) into <code>grep</code> with <code>-A n</code> (after match), <code>-B n</code> (before match) or <code>-C n</code> (after and before) options (with <code>n</code> the number of context lines to display). A simple regular expression can include the characters used to indicate insertion/deletion/modification ( &lt; &gt; | ) to go to those interesting lines.</p>
+
+<p>Usually the match(es) is(are) highlighted in colour and the <code>--</code> in the output indicates that there are lines not displayed between matches.  </p>
+
+<p>The sample here tries to find about that lonely &#39;set status disable&#39; found in Passwordless examples.</p></li>
+</ul>
+
+<div><pre><code class="language-none"> compfnet.sh -p 122 -m full 10.1.1.10 FGT-10.1.1.10_baseline.txt | grep -C 10 &#39;set status disable.*&lt;&#39;</code></pre></div>
+
+<div><pre><code class="language-none">            config max-range-segment                            config max-range-segment
+                set status enable                                       set status enable
+                set log enable                                          set log enable
+                set severity high                                       set severity high
+            end                                                         end
+        end                                                         end
+    next                                                        next
+end                                                         end
+config firewall policy                                      config firewall policy
+    edit 1                                                      edit 1
+        set status disable                               &lt;
+        set name &quot;vlan666 to internet&quot;                      set name &quot;vlan666 to internet&quot;
+        set uuid 2ce20830-f680-51ea-a7b3-cd0525540db3       set uuid 2ce20830-f680-51ea-a7b3-cd0525540db3
+        set srcintf &quot;vlan666&quot;                               set srcintf &quot;vlan666&quot;
+        set dstintf &quot;port1&quot;                                 set dstintf &quot;port1&quot;
+        set srcaddr &quot;vlan666 address&quot;                       set srcaddr &quot;vlan666 address&quot;
+        set dstaddr &quot;all&quot;                                   set dstaddr &quot;all&quot;
+        set action accept                                   set action accept
+        set schedule &quot;always&quot;                               set schedule &quot;always&quot;
+        set service &quot;ALL&quot;                                   set service &quot;ALL&quot;
+        set nat enable                                      set nat enable</code></pre></div>
+
+
+
+
+</body>
+
+</html>
