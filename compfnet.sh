@@ -79,7 +79,7 @@ N
 }"
     else
     #preparing sed arguments with searched conf_line
-    sed_args="/config/{
+    sed_args="/config|edit/{
 :a
 N
 /end/\!ba
@@ -89,9 +89,11 @@ N
 
     sed_args=$(sed 's/\\!/!/g' <<< "$sed_args")
 
-  #  sed_args2=$(sed 's/\\!/!/g' <<< "$sed_args2")
+    #sed_args=$(sed 's/$conf_line/''/g' <<< "$sed_args")
+   
+ #   sed_args2=$(sed 's/\\!/!/g' <<< "$sed_args2")
 
-    echo "$sed_args"
+  echo "$sed_args"
 
     if (( $# == 0)) ; then
     # if the file argument was not provided or does not exist, go for running
@@ -108,13 +110,13 @@ show
         echo "---- Searching RUNNING CONFIG for $conf_line ----"
         echo ""
         result=`sed -nE "$sed_args" <<< "$running"`
-        echo "$result"
+        sed 's/\$$//g' <<< "$result"
     elif (( $# == 1)) ; then
         file=$1
         echo "---- Searching FILE $file for $conf_line ----"
         echo ""
         sed -nE "$sed_args" $file
-        echo "$result"
+        sed 's/\$$//g' <<< "$result"
     else
         echo "Wrong number of arguments passed to $0. It takes one or zero."
         exit 1
@@ -287,11 +289,7 @@ show
     else
         diff -y <(echo "$coutput") "$2" 
     fi
-  #  
-  #echo "=== Lines only in $2 === "
-  #diff --changed-group-format='%<' --unchanged-group-format='' -I "^.*set.*ENC" "$2" <(echo "$coutput")  
-  #echo "=== Lines only in running === "
-  #diff --changed-group-format='%>' --unchanged-group-format='' -I "^.*set.*ENC" "$2" <(echo "$coutput")  
+
 fi
 
 

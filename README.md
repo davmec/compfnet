@@ -57,8 +57,8 @@ Just a few examples of the intended use for the tool.
 
 Running the command with only the mandatory Fortinet host (IP or hostname) generates a baseline configuration (based on the current configuration) with automatic naming to `<Platform>-<Hostname-or-IP>_baseline.txt`, where:
 
-* <Platform> is the acronym of a Fortinet platform. Currently only FortiGate(FGT) and FortiADC(FAD) supported
-* <Hostname-or-IP> is the exact transcription of the mandatory argument
+* `<Platform>` is the acronym of a Fortinet platform. Currently only FortiGate(FGT) and FortiADC(FAD) supported
+* `<Hostname-or-IP>` is the exact transcription of the mandatory argument
 
 The generation of the baseline file can be run with the `-p` and or `-s` options. Others are not applicable. The command produces no console output (if everything went well).
 
@@ -241,11 +241,44 @@ The examples shown in this section target a FortiADC with SSH admin password for
 ```
 compfnet.sh -s fortiadcpwd -m new adc1 FAD-adc1_baseline.txt
 ```
+```
+Config lines in running config:     1080
+Config lines in baseline FAD-fp2_baseline.txt:     1083
+=========================================================================================
+   diff                          RUNNING FAD CONFIG       < >      FAD-fp2_baseline.txt
+=========================================================================================							                                >	  edit 3
+							                                >	    set interface port3
+							                                >	    set port 443
+							                                >	    set max-packet-count 300
+							                                >	  next
+							                                >	  edit "test"
+							                                >	    set real-server-ssl-profile NONE
+							                                >	    config  pool_member
+							                                >	    end
+							                                >	  next
+  edit "empty_pool"					                        <
+    set health-check-ctrl enable			                <
+    set health-check-list LB_HLTHCK_ICMP 		            <
+    set real-server-ssl-profile NONE			            <
+    config  pool_member					                    <
+    end							                            <
+  next							                            <
+FortiADC-KVM # 						      /	FortiADC-KVM #
+```
 
 * Example 2:  Show only the lines that have been modified.
 
 ```
 compfnet.sh -s fortiadcpwd -m mod adc1 FAD-adc1_baseline.txt
+```
+```
+Config lines in running config:     1080
+Config lines in baseline FAD-fp2_baseline.txt:     1083
+=========================================================================================
+   diff                          RUNNING FAD CONFIG       < >      FAD-fp2_baseline.txt
+=========================================================================================
+    set allowaccess https ping ssh http 		            |	    set allowaccess https ping http
+    set allowaccess ping snmp 				                |	    set allowaccess ping
 ```
 
 * Example 3:  Show both the lines added/removed and those that have been modified.
@@ -254,10 +287,70 @@ compfnet.sh -s fortiadcpwd -m mod adc1 FAD-adc1_baseline.txt
 compfnet.sh -s fortiadcpwd -m all adc1 FAD-adc1_baseline.txt
 ```
 
+```
+Config lines in running config:     1080
+Config lines in baseline FAD-fp2_baseline.txt:     1083
+=========================================================================================
+   diff                          RUNNING FAD CONFIG       < >      FAD-fp2_baseline.txt
+=========================================================================================
+    set allowaccess https ping ssh http 		            |	    set allowaccess https ping http
+    set allowaccess ping snmp 				                |	    set allowaccess ping
+							                                >	  edit 3
+							                                >	    set interface port3
+							                                >	    set port 443
+							                                >	    set max-packet-count 300
+							                                >	  next
+							                                >	  edit "test"
+							                                >	    set real-server-ssl-profile NONE
+							                                >	    config  pool_member
+							                                >	    end
+							                                >	  next
+  edit "empty_pool"					                        <
+    set health-check-ctrl enable			                <
+    set health-check-list LB_HLTHCK_ICMP 		            <
+    set real-server-ssl-profile NONE			            <
+    config  pool_member					                    <
+    end							                            <
+  next							                            <
+FortiADC-KVM # 						      /	FortiADC-KVM #
+```
+
+
 * Example 4:  Show everything, including lines that are the same in both the running config and the baseline file.
 
 ```
 compfnet.sh -s fortiadcpwd -m full adc1 FAD-adc1_baseline.txt
+```
+
+```
+Config lines in running config:     1080
+Config lines in baseline FAD-fp2_baseline.txt:     1083
+=========================================================================================
+   diff                          RUNNING FAD CONFIG       < >      FAD-fp2_baseline.txt
+=========================================================================================
+FortiADC-KVM # config system global                             FortiADC-KVM # config system global
+  set hostname FortiADC-KVM                                       set hostname FortiADC-KVM
+end                                                             end
+config system traffic-group                                     config system traffic-group
+end                                                             end
+config system interface                                         config system interface
+  edit "port1"                                                    edit "port1"
+    set vdom root                                                   set vdom root
+    set ip 10.9.8.2/24                                              set ip 10.9.8.2/24
+    set allowaccess https ping ssh http telnet                      set allowaccess https ping ssh http telnet
+    config  ha-node-ip-list                                         config  ha-node-ip-list
+    end                                                             end
+  next                                                            next
+  edit "port2"                                                    edit "port2"
+    set vdom root                                                   set vdom root
+    set ip 10.11.12.1/24                                            set ip 10.11.12.1/24
+    set allowaccess https ping ssh http                       |     set allowaccess https ping http
+    config  ha-node-ip-list                                         config  ha-node-ip-list
+    end                                                             end
+.
+.
+.
+(continues till end of the configuration)
 ```
 
 * Example 5:  Show both the lines added/removed and those that have been modified. Now using a custom SSH port. Especially useful if you target port forwarded hosts, like FortiADC in FortiPoC.
@@ -265,7 +358,7 @@ compfnet.sh -s fortiadcpwd -m full adc1 FAD-adc1_baseline.txt
 ```
 compfnet.sh -s fortiadcpwd -p 10103 -m all adc1 FAD-adc1_baseline.txt
 ```
-
+Similar output to example 3.
 
 ## Locating configuration changes in context
 The previous command options will show differences, but those are usually single lines, potentially scattered in the configuration file. If you do not know the context for a particular difference (added/removed or modified line), you can run again the tool as follows: `compfnet.sh -f 'config line can have spaces' adc [baseline]` .  
@@ -283,14 +376,14 @@ If you run the `-m new`, `-m mod` or `-m all` comparisons, the running config wi
 ### Searching for context in running config line change
 
 ```
-compfnet.sh -s fortiadcpwd -p 10103 -m all -f adc1 
+compfnet.sh -s fortiadcpwd -p 10103 -f adc1 
 ```
 
 
 ### Searching for context in baseline config line change
 
 ```
-compfnet.sh -s fortiadcpwd -p 10103 -m all -f adc1 
+compfnet.sh -s fortiadcpwd -p 10103 -f adc1 
 ```
 
 ### Tips and other ways to see config context
