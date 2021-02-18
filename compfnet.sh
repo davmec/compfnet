@@ -83,17 +83,13 @@ N
 :a
 N
 /end/\!ba
-/$conf_line/l
+/$conf_line/p
 }"
     fi
 
     sed_args=$(sed 's/\\!/!/g' <<< "$sed_args")
 
-    #sed_args=$(sed 's/$conf_line/''/g' <<< "$sed_args")
-   
- #   sed_args2=$(sed 's/\\!/!/g' <<< "$sed_args2")
-
-  echo "$sed_args"
+ # echo "$sed_args"
 
     if (( $# == 0)) ; then
     # if the file argument was not provided or does not exist, go for running
@@ -107,16 +103,16 @@ show
         fi
         # sed has to scan data from variable instead of file in this case
         # Searsching for 
-        echo "---- Searching RUNNING CONFIG for $conf_line ----"
+        echo "---- Searching RUNNING CONFIG for '$conf_line' ----"
         echo ""
-        result=`sed -nE "$sed_args" <<< "$running"`
-        sed 's/\$$//g' <<< "$result"
+        sed -nE "$sed_args" <<< "$running"
+#        sed 's/\$$//g' <<< "$result"
     elif (( $# == 1)) ; then
         file=$1
-        echo "---- Searching FILE $file for $conf_line ----"
+        echo "---- Searching FILE $file for '$conf_line' ----"
         echo ""
         sed -nE "$sed_args" $file
-        sed 's/\$$//g' <<< "$result"
+ #       sed 's/\$$//g' <<< "$result"
     else
         echo "Wrong number of arguments passed to $0. It takes one or zero."
         exit 1
@@ -243,13 +239,28 @@ if (( $# == 1)) ; then
         printContext 
         # exit after this since we do not want to rewrite the baseline for this
         exit 0
-    fi    
+    fi
+
+    base_file_name="$fPlatform-$1_baseline"
+
+    # check if file exists to prevent overwriting
+    if [[ -f "$base_file_name.txt" ]] ; then
+        echo "--- WARNING: Baseline file $base_file_name.txt found. ---"
+        read -p "Overwrite with current running config: /Yes/No/Quit (Y/N/Q)? " resp
+        case $resp in
+            [Yy]* )  base_file_name="$base_file_name.txt" ;;
+            [Nn]* )  timestamp=`date +%S-%M:%H-%d-%m-%Y`; base_file_name="$base_file_name.$timestamp.txt" ;
+                     echo "RUNNING config saved to file(suffix format SEC-MIN:HOUR-Day-Month-Year):  $base_file_name" ;;
+            * )  echo "Quiting without file changes" ; exit 1 ;;
+        esac
+    fi 
+
     if [[ $s_pwd_used -eq 1 ]] ; then
-        sshpass -p $sshpwd ssh -p $sshport admin@$1 -T > "$fPlatform-$1_baseline.txt" << !
+        sshpass -p $sshpwd ssh -p $sshport admin@$1 -T > $base_file_name << !
 show
 !
     else
-        ssh -p $sshport admin@$1 show > "$fPlatform-$1_baseline.txt"
+        ssh -p $sshport admin@$1 show > $base_file_name
     fi
 fi
 

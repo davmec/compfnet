@@ -60,6 +60,21 @@ Running the command with only the mandatory Fortinet host (IP or hostname) gener
 * `<Platform>` is the acronym of a Fortinet platform. Currently only FortiGate(FGT) and FortiADC(FAD) supported
 * `<Hostname-or-IP>` is the exact transcription of the mandatory argument
 
+When the same baseline file exists, it allows to preserve it, by saving a new baseline with an added timestamp, by answering N to this question (example for `FAD-fp2_baseline.txt`):
+
+```
+--- WARNING: Baseline file FAD-fp2_baseline.txt found. ---
+Overwrite with current running config: /Yes/No/Quit (Y/N/Q)? y
+```
+
+```
+# ll FAD-fp2_baseline.*
+-rw-r--r--  1 dpa  staff    25K Feb 18 15:52 FAD-fp2_baseline.11-52:15-18-02-2021.txt
+-rw-r--r--  1 dpa  staff    25K Feb 18 15:52 FAD-fp2_baseline.35-52:15-18-02-2021.txt
+-rw-r--r--  1 dpa  staff    25K Feb 18 15:52 FAD-fp2_baseline.42-52:15-18-02-2021.txt
+-rw-r--r--@ 1 dpa  staff    25K Feb 18 15:53 FAD-fp2_baseline.txt
+```
+
 The generation of the baseline file can be run with the `-p` and or `-s` options. Others are not applicable. The command produces no console output (if everything went well).
 
 Examples:
@@ -375,16 +390,60 @@ If you run the `-m new`, `-m mod` or `-m all` comparisons, the running config wi
 
 ### Searching for context in running config line change
 
+Let us try get context for the found "modified" line from Example 2 or 3 in the previous section `set allowaccess https ping ssh http`
+
 ```
-compfnet.sh -s fortiadcpwd -p 10103 -f adc1 
+compfnet.sh -s fortiadcpwd -p 10103 -f 'set allowaccess https ping ssh http' adc1 
+```
+```
+---- Searching RUNNING CONFIG for 'set allowaccess https ping ssh http' ----
+
+config system interface
+  edit "port1"
+    set vdom root
+    set ip 10.9.8.2/24
+    set allowaccess https ping ssh http telnet
+    config  ha-node-ip-list
+    end
 ```
 
 
 ### Searching for context in baseline config line change
+Let us search now for something that was deleted from the baseline file (according to previous section) like `max-packet-count 300`
+
 
 ```
-compfnet.sh -s fortiadcpwd -p 10103 -f adc1 
+compfnet.sh -s fortiadcpwd -p 10103 -f 'max-packet-count 'adc1 
 ```
+```
+---- Searching RUNNING CONFIG for 'max-packet-count 300' ----
+
+config system tcpdump
+  edit 2
+    set interface port1
+    set host 10.11.12.0/24
+    set port 80
+    set max-packet-count 4000
+  next
+  edit 3
+    set interface port3
+    set port 443
+    set max-packet-count 300
+  next
+  edit 4
+    set interface port1
+    set host 10.9.8.0/24
+    set port 80
+    set max-packet-count 200
+  next
+  edit 1
+    set interface port1
+    set host 10.9.8.0/24
+    set max-packet-count 300
+  next
+end
+```
+
 
 ### Tips and other ways to see config context
 
