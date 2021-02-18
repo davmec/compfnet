@@ -64,7 +64,7 @@ When the same baseline file exists, it allows to preserve it, by saving a new ba
 
 ```
 --- WARNING: Baseline file FAD-fp2_baseline.txt found. ---
-Overwrite with current running config: /Yes/No/Quit (Y/N/Q)? y
+Overwrite with current running config: /Yes/No/Quit (Y/N/Q)? n
 ```
 
 ```
