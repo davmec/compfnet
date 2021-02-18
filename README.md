@@ -49,7 +49,6 @@ Usage: ./compfnet.sh [-p sshport] [-s sshpassword] [-m mode] [-f 'string'] fneth
 ```
 
 
-
 ## Common Uses (Examples)
 Just a few examples of the intended use for the tool.
 
