@@ -174,15 +174,25 @@ if [[ $s_pwd_used -eq 1 ]] ; then
     if [[ $? == 127 ]] ; then
         echo "sshpass is required to run this script, when using the -s sshpassword option."
         exit 1
+    else
+        sshpass -e ssh -p $sshport admin@$1 exit &> /dev/null
+        return_code=$?
+        if [[ $return_code -eq 6 ]] ; then
+            echo "Error unknown Host Public Key for $1"
+            echo "Possible solution:"
+            echo " - Log in manually with SSH once to add the host key to your known_hosts file"
+            exit $return_code
+        fi
     fi
 else
-    # Check that the user default user key has been added to target host. If not, add it.
-    ssh -p $sshport -q -o "BatchMode=yes" admin@$1 exit 0 &> /dev/null
+    # Check that the user default user key has been added to target host. 
+    ssh -p $sshport -q -o "BatchMode=yes" admin@$1 exit &> /dev/null
     return_code=$?
     if [[ $return_code -ne 0 ]] ; then
         echo "Error logging in automatically with your default ssh public key. "
         echo "Possible solutions:"
         echo " - Install the public ssh in the Fortinet device (if possible)"
+        echo " - Log in manually with SSH once to add the host key to your known_hosts file"
         echo " - Run $0 with the -s option, to specify the ssh password. Requires sshpass installed."
         exit $return_code
     fi
