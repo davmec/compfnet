@@ -738,9 +738,9 @@ config system interface
 
 <p>Let us search now for something that was deleted from the baseline file (according to previous section) like <code>max-packet-count 300</code></p>
 
-<div><pre><code class="language-none">compfnet.sh -s fortiadcpwd -p 10103 -f &#39;max-packet-count &#39;adc1 </code></pre></div>
+<div><pre><code class="language-none">compfnet.sh -s fortiadcpwd -p 10103 -f &#39;max-packet-count 300&#39; adc1 FAD-adc1_baseline.txt</code></pre></div>
 
-<div><pre><code class="language-none">---- Searching RUNNING CONFIG for &#39;max-packet-count 300&#39; ----
+<div><pre><code class="language-none">---- Searching FILE FAD-adc1_baseline.txt for &#39;max-packet-count 300&#39; ----
 
 config system tcpdump
   edit 2

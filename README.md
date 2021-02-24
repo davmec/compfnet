@@ -416,10 +416,10 @@ Let us search now for something that was deleted from the baseline file (accordi
 
 
 ```
-compfnet.sh -s fortiadcpwd -p 10103 -f 'max-packet-count 'adc1 
+compfnet.sh -s fortiadcpwd -p 10103 -f 'max-packet-count 300' adc1 FAD-adc1_baseline.txt
 ```
 ```
----- Searching RUNNING CONFIG for 'max-packet-count 300' ----
+---- Searching FILE FAD-adc1_baseline.txt for 'max-packet-count 300' ----
 
 config system tcpdump
   edit 2

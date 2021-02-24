@@ -253,6 +253,8 @@ if (( $# == 1)) ; then
                      echo "RUNNING config saved to file(suffix format SEC-MIN:HOUR-Day-Month-Year):  $base_file_name" ;;
             * )  echo "Quiting without file changes" ; exit 1 ;;
         esac
+    else
+        base_file_name="$base_file_name.txt"
     fi 
 
     if [[ $s_pwd_used -eq 1 ]] ; then
